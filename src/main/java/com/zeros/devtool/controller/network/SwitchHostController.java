@@ -29,18 +29,7 @@ public class SwitchHostController extends SwitchHostView {
 
 
     private void initEvent() {
-        Tab tab = new Tab(Constants.ADD_HOST);
-        tab.setClosable(false);
-        tab.setStyle("-fx-font-size: 16pt;");
-        tabPaneMain.getTabs().add(tab);
-        tabPaneMain.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            if(newTab == tab) {
-                switchHostService.handleAddMenuItemEvent(tabPaneMain);
-            }
-
-            switchHostService.setMenuItemVisible(tabPaneMain);
-        });
-
+        //tabPane 添加菜单
         switchHostService.handleTabPaneEvent(tabPaneMain);
     }
 

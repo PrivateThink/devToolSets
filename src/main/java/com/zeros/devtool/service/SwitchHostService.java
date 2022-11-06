@@ -8,18 +8,18 @@ import com.zeros.devtool.enums.MenuTypeEnum;
 import com.zeros.devtool.utils.AtomicIntegerUtils;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.SystemUtils;
+import com.zeros.devtool.utils.ToastUtil;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.PopupWindow;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -40,32 +40,30 @@ import java.util.regex.Matcher;
 
 public class SwitchHostService {
 
-
-    private final List<String> hostTypes = new ArrayList<>();
-
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     //保存host的tab页面
-    private final ConcurrentHashMap<String, Tab> hostTab = new ConcurrentHashMap<>();
-
-    //保存host文件名
-    private final List<String> hostFilePath = new ArrayList<>();
+    private static final ConcurrentHashMap<String, Tab> hostTab = new ConcurrentHashMap<>();
 
     //CodeArea 与 fileName
-    private final HashMap<CodeArea, String> codeAreaFile = new HashMap<>();
+    private static final HashMap<CodeArea, String> codeAreaFile = new HashMap<>();
+
+    private static final List<String> hostFileName = new ArrayList<>();
+
+    private  static String fileName = null;
 
 
     //获取网络的树形菜单
     private TreeItem<Label> getNetWorkRootTreeItem() {
-        //元素
+        //网络
         TreeItem<Label> network = new TreeItem<>(this.getLabel(MenuTypeEnum.NETWORK.getType(), Constants.NETWORK));
         network.setExpanded(true);
+        //切换host
         TreeItem<Label> switchHost = new TreeItem<>(this.getLabel(MenuTypeEnum.SWITCH_HOST.getType(), Constants.SWITCH_HOST));
+        //系统当前的host
         TreeItem<Label> currentHostItem = new TreeItem<>(this.getLabel(MenuTypeEnum.CURRENT_HOST.getType(), Constants.CURRENT_HOST));
         network.getChildren().add(switchHost);
         switchHost.getChildren().add(currentHostItem);
-
-        this.addHostType(MenuTypeEnum.CURRENT_HOST.getType());
 
 
         currentHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -73,26 +71,30 @@ public class SwitchHostService {
             public void handle(MouseEvent event) {
 
                 //加载系统当前的host
-                if (event.getButton() == MouseButton.PRIMARY) {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    if (hostTableExist(Constants.CURRENT_HOST)){
+                        //点击切换host tab
+                        switchHostTab(Constants.CURRENT_HOST);
+                        return;
+                    }
                     String hostFile = "";
                     if (SystemUtils.isWindows()) {
                         hostFile = FileConstants.WIN_HOST;
                     } else {
                         hostFile = FileConstants.MAC_HOST;
                     }
-
+                    //设置为tabPane
                     SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
-
                     IndexController indexController = ControllerMangerUtil.getIndexController();
                     indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
 
 
                     //添加host tab
-                    CodeArea codeArea = SwitchHostService.this.addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
+                    CodeArea codeArea = addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
                     //读取host
-                    SwitchHostService.this.loadSystemHost(codeArea, hostFile);
+                    loadSystemHost(codeArea, hostFile);
                     //选择系统当前的host
-                    SwitchHostService.this.switchHostTab(Constants.CURRENT_HOST);
+                    switchHostTab(Constants.CURRENT_HOST);
                 }
             }
         });
@@ -101,22 +103,20 @@ public class SwitchHostService {
             @Override
             public void handle(MouseEvent event) {
 
-                if (event.getButton() == MouseButton.PRIMARY) {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
 
-                    List<String> hostFileList = new ArrayList<>();
-
+                    //设置为tabPane
                     SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
-
                     IndexController indexController = ControllerMangerUtil.getIndexController();
                     indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
 
                     //添加host tab
-                    CodeArea codeArea = SwitchHostService.this.addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
+                    CodeArea codeArea = addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
                     //读取host
-                    SwitchHostService.this.loadSystemHost(codeArea, FileConstants.WIN_HOST);
+                    loadSystemHost(codeArea, FileConstants.WIN_HOST);
 
                     //选择系统当前的host
-                    SwitchHostService.this.switchHostTab(Constants.CURRENT_HOST);
+                    switchHostTab(Constants.CURRENT_HOST);
 
                     //加载保存的host文件
                     File hostPath = new File(FileConstants.HOST_PATH);
@@ -132,24 +132,21 @@ public class SwitchHostService {
                         if (hostFile.isFile() && hostFile.getName().endsWith(FileConstants.HOST_SUFFIX)) {
                             String name = hostFile.getName().substring(0, hostFile.getName().indexOf(FileConstants.HOST_SUFFIX));
                             //添加host tab
-                            CodeArea area = SwitchHostService.this.addHostTab(name, switchHostController.getTabPaneMain());
+                            CodeArea area = addHostTab(name, switchHostController.getTabPaneMain());
                             //读取host
-                            SwitchHostService.this.loadSystemHost(area, hostFile.getAbsolutePath());
+                            loadSystemHost(area, hostFile.getAbsolutePath());
                             //保存当前系统host的codeArea和fileName
-                            codeAreaFile.put(codeArea, hostFile.getAbsolutePath());
-                            TreeItem<Label> switchHost = SwitchHostService.this.getSwitchHost();
+                            codeAreaFile.put(area, hostFile.getAbsolutePath());
                             String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + hostFile.getName();
-                            if (!hostTypes.contains(hostType)) {
-                                SwitchHostService.this.addHostType(hostType);
-                                TreeItem<Label> newHostItem = new TreeItem<>(SwitchHostService.this.getLabel(hostType, name));
-
+                            if (!existItem(switchHost, name)) {
+                                TreeItem<Label> newHostItem = new TreeItem<>(getLabel(hostType, name));
                                 switchHost.getChildren().add(newHostItem);
                                 newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
                                     @Override
                                     public void handle(MouseEvent event) {
                                         if (event.getButton() == MouseButton.PRIMARY) {
                                             //点击切换host tab
-                                            SwitchHostService.this.switchHostTab(name);
+                                            switchHostTab(name);
                                         }
                                     }
                                 });
@@ -160,6 +157,30 @@ public class SwitchHostService {
                 }
             }
         });
+
+        ContextMenu switchHostMenu = new ContextMenu();
+        MenuItem addItem = new MenuItem("添加");
+        switchHostMenu.getItems().add(addItem);
+        addItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                TextInputDialog dialog = new TextInputDialog("");
+                dialog.setContentText("文件名");
+                dialog.setHeaderText("");
+                dialog.setTitle("");
+                dialog.setGraphic(null);
+
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(name -> fileName = name);
+                if (StringUtils.isEmpty(fileName)){
+                    ToastUtil.toast("文件名不能为空",2000);
+                    return;
+                }
+
+                addHostAndFile(fileName);
+            }
+        });
+        switchHost.getValue().setContextMenu(switchHostMenu);
 
         return network;
     }
@@ -198,18 +219,6 @@ public class SwitchHostService {
         label.setId(id);
         label.setText(text);
         return label;
-    }
-
-
-    public List<String> getHostTypes() {
-        return hostTypes;
-    }
-
-    public synchronized void addHostType(String name) {
-        if (hostTypes.contains(name)) {
-            return;
-        }
-        hostTypes.add(name);
     }
 
 
@@ -257,6 +266,7 @@ public class SwitchHostService {
             if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(event)) {
                 try {
                     FileUtils.writeStringToFile(new File(codeAreaFile.get(hostArea)), hostArea.getText(), "UTF-8");
+                    ToastUtil.toast("保存host成功",2000);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -290,27 +300,12 @@ public class SwitchHostService {
         //如果不存在host tab，则新建并缓存
         if (!hostTableExist(fileName)) {
             tab = new Tab(fileName);
-            if (Constants.CURRENT_HOST.equals(fileName)) {
-                tab.setClosable(false);
-            }
             hostTab.put(fileName, tab);
             hostArea = new CodeArea();
             tab.setContent(hostArea);
-            tabPaneMain.getTabs().add(tabPaneMain.getTabs().size() - 1, tab);
-            tabPaneMain.getSelectionModel().select(tabPaneMain.getTabs().size() - 2);
+            tabPaneMain.getTabs().add(tab);
+            tabPaneMain.getSelectionModel().select(tab);
             this.initHostArea(hostArea);
-            tab.setOnClosed(new EventHandler<Event>() {
-                @Override
-                public void handle(Event event) {
-                    //关闭
-                    String tabText = tab.getText();
-                    TreeItem<Label> switchHost = getSwitchHost();
-                    if (!Constants.CURRENT_HOST.equals(tabText)) {
-                        hostTab.remove(tabText);
-                        switchHost.getChildren().removeIf(host -> tabText.equals(host.getValue().getText()));
-                    }
-                }
-            });
         } else {
             tab = hostTab.get(fileName);
             hostArea = (CodeArea) tab.getContent();
@@ -318,7 +313,7 @@ public class SwitchHostService {
 
         //保存codeArea和fileName
         String hostPath;
-        if (FileConstants.WIN_HOST.equals(fileName)) {
+        if (Constants.CURRENT_HOST.equals(fileName)) {
             hostPath = FileConstants.WIN_HOST;
         } else {
             hostPath = FileConstants.HOST_PATH + File.separator + fileName + FileConstants.HOST_SUFFIX;
@@ -335,8 +330,12 @@ public class SwitchHostService {
     public void switchHostTab(String text) {
         Tab tab = this.getHostTab(text);
         if (tab != null) {
-            //切换host tab
             SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
+            //切换host tab
+            if (!hostTableExist(text)){
+                switchHostController.getTabPaneMain().getTabs().add(tab);
+            }
+
             switchHostController.getTabPaneMain().getSelectionModel().select(tab);
         }
     }
@@ -408,79 +407,48 @@ public class SwitchHostService {
         tabPaneMain.setContextMenu(contextMenu);
     }
 
-    public void handleAddMenuItemEvent(TabPane tabPaneMain) {
+    public void addHostAndFile(String fileName) {
         int index = AtomicIntegerUtils.getAndIncrement();
-        String name = "新文件" + index;
-        SwitchHostService.this.addHostTab(name, tabPaneMain);
+        SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
+        addHostTab(fileName, switchHostController.getTabPaneMain());
         String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + index;
-        SwitchHostService.this.addHostType(hostType);
-        TreeItem<Label> newHostItem = new TreeItem<>(SwitchHostService.this.getLabel(hostType, name));
-        TreeItem<Label> switchHost = SwitchHostService.this.getSwitchHost();
+        TreeItem<Label> newHostItem = new TreeItem<>(this.getLabel(hostType, fileName));
+        TreeItem<Label> switchHost = this.getSwitchHost();
         switchHost.getChildren().add(newHostItem);
         newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
                     //点击切换host tab
-                    SwitchHostService.this.switchHostTab(name);
+                    switchHostTab(fileName);
                 }
             }
         });
+        String hostFile = FileConstants.HOST_PATH + File.separator + fileName + FileConstants.HOST_SUFFIX;
+        try {
+            FileUtils.writeStringToFile(new File(hostFile), "", "UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleCloseMenuItemEvent(TabPane tabPaneMain) {
-        TreeItem<Label> switchHost = SwitchHostService.this.getSwitchHost();
-        Iterator<Tab> iterator = tabPaneMain.getTabs().iterator();
-        while (iterator.hasNext()) {
-            Tab tab = iterator.next();
-            if (tab.selectedProperty().getValue()) {
-                String tabText = tab.getText();
-                //系统当前host不能关闭,添加host按钮也不能关闭
-                if (!Constants.CURRENT_HOST.equals(tabText) && !Constants.ADD_HOST.equals(tabText)) {
-                    iterator.remove();
-                    SwitchHostService.this.getHostTypes().remove(tabText);
-                    switchHost.getChildren().removeIf(host -> tabText.equals(host.getValue().getText()));
-                    break;
-                }
-            }
-        }
+        tabPaneMain.getTabs().removeIf(tab -> tab.selectedProperty().getValue());
     }
 
     private void handleCloseAllMenuItemEvent(TabPane tabPaneMain) {
-        TreeItem<Label> switchHost = SwitchHostService.this.getSwitchHost();
-        Iterator<Tab> iterator = tabPaneMain.getTabs().iterator();
-        while (iterator.hasNext()) {
-            Tab tab = iterator.next();
-            String tabText = tab.getText();
-            if (!Constants.CURRENT_HOST.equals(tabText) && !Constants.ADD_HOST.equals(tabText)) {
-                iterator.remove();
-                switchHost.getChildren().removeIf(host -> tabText.equals(host.getValue().getText()));
-                SwitchHostService.this.getHostTypes().remove(tabText);
-            }
-        }
+        tabPaneMain.getTabs().clear();
     }
 
     private void handleCloseOtherMenuItemEvent(TabPane tabPaneMain) {
-        TreeItem<Label> switchHost = SwitchHostService.this.getSwitchHost();
-        Iterator<Tab> iterator = tabPaneMain.getTabs().iterator();
-        while (iterator.hasNext()) {
-            Tab tab = iterator.next();
-            String tabText = tab.getText();
-            if (!tab.selectedProperty().getValue() && !Constants.ADD_HOST.equals(tabText)) {
-                if (!Constants.CURRENT_HOST.equals(tabText)) {
-                    SwitchHostService.this.getHostTypes().remove(tabText);
-                    switchHost.getChildren().removeIf(host -> tabText.equals(host.getValue().getText()));
-                }
-                iterator.remove();
-            }
-        }
+        tabPaneMain.getTabs().removeIf(tab -> !tab.selectedProperty().getValue());
     }
 
     public void setMenuItemVisible(TabPane tabPaneMain) {
 
         //如果只剩下当前系统页面和添加host页面，则隐藏菜单
         ContextMenu contextMenu = tabPaneMain.getContextMenu();
-        if (tabPaneMain.getTabs().size() <= 2) {
+        if (tabPaneMain.getTabs().size() <= 1) {
             for (MenuItem item : contextMenu.getItems()) {
                 item.setVisible(false);
             }
@@ -489,5 +457,20 @@ public class SwitchHostService {
                 item.setVisible(true);
             }
         }
+    }
+
+    public boolean existItem(TreeItem<Label> treeItem, String name) {
+
+        if (treeItem == null || treeItem.getChildren() == null) {
+            return false;
+        }
+        ObservableList<TreeItem<Label>> items = treeItem.getChildren();
+        for (TreeItem<Label> item : items) {
+            if (item.getValue().getText().equals(name)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
