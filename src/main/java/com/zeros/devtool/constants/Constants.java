@@ -26,6 +26,7 @@ public class Constants {
     public static final String  NETWORK ="网络";
     public static final String  SWITCH_HOST ="切换Host";
     public static final String  CURRENT_HOST ="系统当前的Host";
+    public static final String  ADD_HOST ="+";
 
 
     //========================== text =============================

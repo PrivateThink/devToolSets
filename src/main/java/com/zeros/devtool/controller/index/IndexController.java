@@ -1,6 +1,6 @@
 package com.zeros.devtool.controller.index;
 
-import com.zeros.devtool.service.MenuService;
+import com.zeros.devtool.service.SwitchHostService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.view.IndexView;
 import javafx.scene.control.Label;
@@ -14,12 +14,7 @@ import java.util.ResourceBundle;
 public class IndexController extends IndexView {
 
 
-    public MenuService getMenuService() {
-        return menuService;
-    }
-
-    private final MenuService menuService = new MenuService();
-
+    private final SwitchHostService switchHostService = new SwitchHostService();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,8 +24,7 @@ public class IndexController extends IndexView {
     }
 
     private void initView() {
-        loadMenu();
-
+        switchHostService.loadMenu(rootTree);
     }
 
 
@@ -41,7 +35,6 @@ public class IndexController extends IndexView {
                 return;
             }
 
-
         });
 
     }
@@ -49,19 +42,5 @@ public class IndexController extends IndexView {
     private void initService() {
         ControllerMangerUtil.setController(IndexController.this.getClass().getName(), this);
     }
-
-
-    private void loadMenu() {
-        TreeItem<Label> network = menuService.getNetWorkRootTreeItem();
-        TreeItem<Label> text = menuService.getTextRootTreeItem();
-        TreeItem<Label> all = menuService.getRootTreeItem();
-        all.getChildren().add(network);
-        all.getChildren().add(text);
-        all.setExpanded(true);
-        rootTree.setRoot(all);
-    }
-
-
-
 
 }

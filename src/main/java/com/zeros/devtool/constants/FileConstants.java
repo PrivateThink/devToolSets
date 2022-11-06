@@ -19,4 +19,6 @@ public class FileConstants {
     public static final String NETWORK_PATH = USER_HOME + File.separator + DEV_TOOL_SETS + File.separator + NETWORK;
 
     public static final String HOST_PATH = NETWORK_PATH + File.separator + HOST;
+
+    public static final String HOST_SUFFIX =".host";
 }

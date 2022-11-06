@@ -10,5 +10,4 @@ public class DevToolSetsMain {
         Application.launch(DevToolSetsApp.class, args);
     }
 
-
 }
