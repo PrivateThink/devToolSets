@@ -2,24 +2,28 @@ package com.zeros.devtool.service;
 
 import com.zeros.devtool.constants.Constants;
 import com.zeros.devtool.constants.FileConstants;
+import com.zeros.devtool.constants.FxmlConstant;
 import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
 import com.zeros.devtool.enums.MenuTypeEnum;
-import com.zeros.devtool.utils.AtomicIntegerUtils;
-import com.zeros.devtool.utils.ControllerMangerUtil;
-import com.zeros.devtool.utils.SystemUtils;
-import com.zeros.devtool.utils.ToastUtil;
+import com.zeros.devtool.utils.*;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.controlsfx.control.ToggleSwitch;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
@@ -50,7 +54,6 @@ public class SwitchHostService {
 
     private static final List<String> hostFileName = new ArrayList<>();
 
-    private  static String fileName = null;
 
 
     //获取网络的树形菜单
@@ -63,7 +66,7 @@ public class SwitchHostService {
         //系统当前的host
         TreeItem<Label> currentHostItem = new TreeItem<>(this.getLabel(MenuTypeEnum.CURRENT_HOST.getType(), Constants.CURRENT_HOST));
         network.getChildren().add(switchHost);
-        switchHost.getChildren().add(currentHostItem);
+
 
 
         currentHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -104,85 +107,137 @@ public class SwitchHostService {
             public void handle(MouseEvent event) {
 
                 if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-
-                    //设置为tabPane
-                    SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
-                    IndexController indexController = ControllerMangerUtil.getIndexController();
-                    indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
-
-                    //添加host tab
-                    CodeArea codeArea = addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
-                    //读取host
-                    loadSystemHost(codeArea, FileConstants.WIN_HOST);
-
-                    //选择系统当前的host
-                    switchHostTab(Constants.CURRENT_HOST);
-
-                    //加载保存的host文件
-                    File hostPath = new File(FileConstants.HOST_PATH);
-                    if (!hostPath.exists()) {
-                        hostPath.mkdirs();
+                    ObservableList<TreeItem<Label>> treeItems = switchHost.getChildren();
+                    if (!treeItems.contains(currentHostItem)){
+                        switchHost.getChildren().add(currentHostItem);
                     }
-                    File[] hostFiles = hostPath.listFiles();
-                    if (hostFiles == null || hostFiles.length == 0) {
-                        return;
-                    }
-
-                    for (File hostFile : hostFiles) {
-                        if (hostFile.isFile() && hostFile.getName().endsWith(FileConstants.HOST_SUFFIX)) {
-                            String name = hostFile.getName().substring(0, hostFile.getName().indexOf(FileConstants.HOST_SUFFIX));
-                            //添加host tab
-                            CodeArea area = addHostTab(name, switchHostController.getTabPaneMain());
-                            //读取host
-                            loadSystemHost(area, hostFile.getAbsolutePath());
-                            //保存当前系统host的codeArea和fileName
-                            codeAreaFile.put(area, hostFile.getAbsolutePath());
-                            String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + hostFile.getName();
-                            if (!existItem(switchHost, name)) {
-                                TreeItem<Label> newHostItem = new TreeItem<>(getLabel(hostType, name));
-                                switchHost.getChildren().add(newHostItem);
-                                newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                    @Override
-                                    public void handle(MouseEvent event) {
-                                        if (event.getButton() == MouseButton.PRIMARY) {
-                                            //点击切换host tab
-                                            switchHostTab(name);
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    }
-
+                    loadHost(switchHost);
                 }
             }
         });
 
+
+
+        return network;
+    }
+
+    public void loadHost(TreeItem<Label> switchHost) {
+        //设置为tabPane
+        SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
+        IndexController indexController = ControllerMangerUtil.getIndexController();
+        indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
+
+        //添加host tab
+        CodeArea codeArea = addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
+        //读取host
+        loadSystemHost(codeArea, FileConstants.WIN_HOST);
+
+        //选择系统当前的host
+        switchHostTab(Constants.CURRENT_HOST);
+
+        //加载保存的host文件
+        File hostPath = new File(FileConstants.HOST_PATH);
+        if (!hostPath.exists()) {
+            hostPath.mkdirs();
+        }
+        File[] hostFiles = hostPath.listFiles();
+        if (hostFiles == null || hostFiles.length == 0) {
+            return;
+        }
+
+        //加载host文件
+        for (File hostFile : hostFiles) {
+            if (hostFile.isFile() && hostFile.getName().endsWith(FileConstants.HOST_SUFFIX)) {
+                String name = hostFile.getName().substring(0, hostFile.getName().indexOf(FileConstants.HOST_SUFFIX));
+                //添加host tab
+                CodeArea area = addHostTab(name, switchHostController.getTabPaneMain());
+                //读取host
+                loadSystemHost(area, hostFile.getAbsolutePath());
+                //保存当前系统host的codeArea和fileName
+                codeAreaFile.put(area, hostFile.getAbsolutePath());
+                String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + hostFile.getName();
+                if (!existItem(switchHost, name)) {
+                    TreeItem<Label> newHostItem = new TreeItem<>(getLabel(hostType, name));
+                    switchHost.getChildren().add(newHostItem);
+                    newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (event.getButton() == MouseButton.PRIMARY) {
+                                //点击切换host tab
+                                switchHostTab(name);
+                            }
+                        }
+                    });
+                    //添加菜单
+                    setHostItemMenu(newHostItem.getValue());
+                }
+            }
+        }
+
+        //设置添加菜单
+        setHostFileMenu(switchHost);
+    }
+
+    private void setHostFileMenu(TreeItem<Label> switchHost) {
+        if (switchHost.getValue().getContextMenu()!=null){
+            return;
+        }
         ContextMenu switchHostMenu = new ContextMenu();
         MenuItem addItem = new MenuItem("添加");
         switchHostMenu.getItems().add(addItem);
         addItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                TextInputDialog dialog = new TextInputDialog("");
-                dialog.setContentText("文件名");
-                dialog.setHeaderText("");
-                dialog.setTitle("");
-                dialog.setGraphic(null);
-
-                Optional<String> result = dialog.showAndWait();
-                result.ifPresent(name -> fileName = name);
-                if (StringUtils.isEmpty(fileName)){
-                    ToastUtil.toast("文件名不能为空",2000);
-                    return;
-                }
-
-                addHostAndFile(fileName);
+                addHostFileEvent(true);
             }
         });
         switchHost.getValue().setContextMenu(switchHostMenu);
+    }
 
-        return network;
+    private void addHostFileEvent(boolean add) {
+        FXMLLoader hostFileNameLoader = FXMLLoaderUtils.getFXMLLoader(FxmlConstant.HOST_FILE_NAME);
+        Stage hostFileStage = new Stage();
+        try {
+            hostFileStage.setScene(new Scene(hostFileNameLoader.load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        hostFileStage.show();
+
+        GridPane hostFileGridPane = hostFileNameLoader.getRoot();
+
+        TextField fileNameTextField = (TextField)hostFileGridPane.getChildren().get(1);
+
+        Button submit = (Button)hostFileGridPane.getChildren().get(2);
+
+        Button cancel = (Button)hostFileGridPane.getChildren().get(3);
+
+
+        submit.setOnMouseClicked(e -> {
+            String fileName = fileNameTextField.getText();
+            if (StringUtils.isEmpty(fileName)){
+                ToastUtil.toast("文件名称不能为空",2000);
+                return;
+            }
+
+            if (hostFileNameExist(fileName)){
+                ToastUtil.toast("文件名称已经存在",2000);
+                return;
+            }
+
+            if(add){
+                addHostAndFile(fileNameTextField.getText());
+                hostFileStage.close();
+                ToastUtil.toast("保存文件成功",2000);
+            }else {
+
+            }
+
+        });
+
+        cancel.setOnMouseClicked(cancelEvent ->{
+            hostFileStage.close();
+        });
     }
 
     private TreeItem<Label> getTextRootTreeItem() {
@@ -319,6 +374,8 @@ public class SwitchHostService {
             hostPath = FileConstants.HOST_PATH + File.separator + fileName + FileConstants.HOST_SUFFIX;
         }
         codeAreaFile.put(hostArea, hostPath);
+        //添加host名字
+        addHostFileName(fileName);
         return hostArea;
     }
 
@@ -424,12 +481,16 @@ public class SwitchHostService {
                 }
             }
         });
+
+        //写文件
         String hostFile = FileConstants.HOST_PATH + File.separator + fileName + FileConstants.HOST_SUFFIX;
         try {
             FileUtils.writeStringToFile(new File(hostFile), "", "UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //添加菜单
+        setHostItemMenu(newHostItem.getValue());
     }
 
     private void handleCloseMenuItemEvent(TabPane tabPaneMain) {
@@ -448,7 +509,7 @@ public class SwitchHostService {
 
         //如果只剩下当前系统页面和添加host页面，则隐藏菜单
         ContextMenu contextMenu = tabPaneMain.getContextMenu();
-        if (tabPaneMain.getTabs().size() <= 1) {
+        if (tabPaneMain.getTabs().size() <= 0) {
             for (MenuItem item : contextMenu.getItems()) {
                 item.setVisible(false);
             }
@@ -472,5 +533,59 @@ public class SwitchHostService {
         }
 
         return false;
+    }
+
+    public boolean hostFileNameExist(String fileName){
+        for (String name : hostFileName) {
+            if (name.equals(fileName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addHostFileName(String fileName){
+        if (hostFileNameExist(fileName)){
+            return;
+        }
+        hostFileName.add(fileName);
+    }
+
+    public void setHostItemMenu(Label label){
+        ContextMenu menu = new ContextMenu();
+        //MenuItem updateItem = new MenuItem("修改名字");
+        MenuItem deleteItem = new MenuItem("删除");
+        menu.getItems().addAll(deleteItem);
+        //menu.getItems().addAll(updateItem,deleteItem);
+//        updateItem.setOnAction(event-> {
+//            addHostFileEvent(false);
+//        });
+
+
+
+        deleteItem.setOnAction(event -> {
+            //删除tab
+            SwitchHostController hostController = ControllerMangerUtil.getSwitchHostController();
+            Tab tab = hostTab.remove(label.getText());
+            hostController.getTabPaneMain().getTabs().remove(tab);
+            hostFileName.remove(label.getText());
+            deleteHostItem(label.getText());
+            //删除文件
+            String fileName = FileConstants.HOST_PATH + File.separator + label.getText() + FileConstants.HOST_SUFFIX;
+            try {
+                FileUtils.forceDelete(new File(fileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        label.setContextMenu(menu);
+    }
+
+    private void  deleteHostItem(String text){
+        TreeItem<Label> switchHost = getSwitchHost();
+        ObservableList<TreeItem<Label>> items = switchHost.getChildren();
+        if (CollectionUtils.isNotEmpty(items)){
+            items.removeIf(treeItem -> treeItem.getValue().getText().equals(text));
+        }
     }
 }

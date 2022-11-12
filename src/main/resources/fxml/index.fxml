@@ -8,9 +8,9 @@
         xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="com.zeros.devtool.controller.index.IndexController">
 
-    <SplitPane dividerPositions="0.3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+    <SplitPane  fx:id="indexSplitPane" dividerPositions="0.3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <VBox>
+        <VBox fx:id="indexVBox">
             <TextField fx:id="searchTex" styleClass="search-text"/>
             <TreeView fx:id="rootTree" VBox.vgrow="ALWAYS"/>
         </VBox>

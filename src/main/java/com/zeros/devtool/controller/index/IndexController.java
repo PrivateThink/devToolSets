@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 
 
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -14,6 +15,8 @@ public class IndexController extends IndexView {
 
 
     private final SwitchHostService switchHostService = new SwitchHostService();
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,6 +38,9 @@ public class IndexController extends IndexView {
             }
 
         });
+
+        //indexPane.maxWidthProperty().bind(indexSplitPane.widthProperty().multiply(0.7));
+        //indexVBox.maxWidthProperty().bind(indexSplitPane.widthProperty().multiply(0.3));
 
     }
 

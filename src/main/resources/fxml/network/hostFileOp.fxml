@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml">
+
+
+    <Label text="文件名称:" GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER" textAlignment="CENTER">
+        <GridPane.margin>
+            <Insets top="20" left="20" bottom="20"/>
+        </GridPane.margin>
+    </Label>
+
+    <TextField fx:id="hostFileName" GridPane.columnIndex="2" GridPane.rowIndex="0">
+        <GridPane.margin>
+            <Insets right="20.0" top="20" left="20" bottom="20"/>
+        </GridPane.margin>
+    </TextField>
+
+    <Button fx:id="submit" GridPane.columnIndex="2" GridPane.rowIndex="1" text="确定" alignment="CENTER">
+        <GridPane.margin>
+            <Insets left="30" bottom="20"/>
+        </GridPane.margin>
+    </Button>
+
+
+    <Button fx:id="cancel" GridPane.columnIndex="2" GridPane.rowIndex="1" text="取消" alignment="CENTER">
+        <GridPane.margin>
+            <Insets right="20.0" left="100" bottom="20"/>
+        </GridPane.margin>
+    </Button>
+
+
+</GridPane>

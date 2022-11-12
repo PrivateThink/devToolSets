@@ -1,11 +1,11 @@
 package com.zeros.devtool.controller.network;
 
-import com.zeros.devtool.constants.Constants;
+
 import com.zeros.devtool.service.SwitchHostService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 
 import com.zeros.devtool.view.network.SwitchHostView;
-import javafx.scene.control.Tab;
+
 
 import java.net.URL;
 
@@ -31,6 +31,11 @@ public class SwitchHostController extends SwitchHostView {
     private void initEvent() {
         //tabPane 添加菜单
         switchHostService.handleTabPaneEvent(tabPaneMain);
+
+        tabPaneMain.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
+            switchHostService.setMenuItemVisible(tabPaneMain);
+        });
+
     }
 
     private void initService() {
