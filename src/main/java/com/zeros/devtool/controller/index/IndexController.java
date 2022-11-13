@@ -1,9 +1,11 @@
 package com.zeros.devtool.controller.index;
 
+import com.zeros.devtool.constants.CssConstants;
 import com.zeros.devtool.service.SwitchHostService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
+import com.zeros.devtool.utils.CssLoadUtil;
 import com.zeros.devtool.view.IndexView;
-import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
 
@@ -31,16 +33,15 @@ public class IndexController extends IndexView {
 
 
     private void initEvent() {
+
+       rootTree.getStylesheets().add(CssLoadUtil.getResourceUrl(CssConstants.ROOT_TREE_CSS));
+
         rootTree.setOnMouseClicked(event -> {
-            TreeItem<Label> item = rootTree.getSelectionModel().getSelectedItem();
+            TreeItem<Node> item = rootTree.getSelectionModel().getSelectedItem();
             if (item == null) {
                 return;
             }
-
         });
-
-        //indexPane.maxWidthProperty().bind(indexSplitPane.widthProperty().multiply(0.7));
-        //indexVBox.maxWidthProperty().bind(indexSplitPane.widthProperty().multiply(0.3));
 
     }
 

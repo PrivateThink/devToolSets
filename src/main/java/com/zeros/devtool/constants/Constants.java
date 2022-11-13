@@ -16,7 +16,7 @@ public class Constants {
     public static final Pattern PATTERN = Pattern
             .compile("(?<KEYWORD>" + KEYWORD_PATTERN + ")" + "|(?<COMMENT>" + COMMENT_PATTERN + ")");
 
-    public static final String  SWITCH_HOST_CSS ="/css/network/switchHost.css";
+
 
 
 

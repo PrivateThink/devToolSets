@@ -8,12 +8,14 @@
         xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="com.zeros.devtool.controller.index.IndexController">
 
-    <SplitPane  fx:id="indexSplitPane" dividerPositions="0.3" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-               AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <VBox fx:id="indexVBox">
-            <TextField fx:id="searchTex" styleClass="search-text"/>
-            <TreeView fx:id="rootTree" VBox.vgrow="ALWAYS"/>
-        </VBox>
-        <BorderPane fx:id="indexPane"/>
-    </SplitPane>
+    <BorderPane fx:id="indexPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <left>
+                <VBox fx:id="indexVBox">
+                    <TextField fx:id="searchTex" styleClass="search-text"/>
+                    <TreeView fx:id="rootTree" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </left>
+    </BorderPane>
+
+
 </AnchorPane>
