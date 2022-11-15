@@ -1,6 +1,7 @@
 package com.zeros.devtool.utils;
 
 import com.zeros.devtool.constants.FxmlConstant;
+import com.zeros.devtool.controller.format.JsonFormatController;
 import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
 import javafx.fxml.FXMLLoader;
@@ -42,6 +43,21 @@ public class ControllerMangerUtil {
 
     public static IndexController getIndexController() {
         IndexController controller = (IndexController) ControllerMangerUtil.getController(IndexController.class.getName());
+        return controller;
+    }
+
+    public static JsonFormatController getJsonFormatController() {
+        JsonFormatController controller = (JsonFormatController) ControllerMangerUtil.getController(JsonFormatController.class.getName());
+        if (controller == null) {
+            FXMLLoader fxmlLoader = FXMLLoaderUtils.getFXMLLoader(FxmlConstant.JSON_FORMAT_HOST);
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            controller = fxmlLoader.getController();
+            ControllerMangerUtil.setController(JsonFormatController.class.getName(), controller);
+        }
         return controller;
     }
 }

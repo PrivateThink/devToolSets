@@ -34,6 +34,13 @@ public class Constants {
 
     public static final String  CLIPBOARD_HISTORY ="剪切板记录";
 
+    public static final String  MEMORANDUM ="备忘录";
+
+    //=======================格式化================================
+
+    public static final String  FORMAT ="格式化";
+
+    public static final String  JSON_FORMAT ="Json格式化";
 
 
 

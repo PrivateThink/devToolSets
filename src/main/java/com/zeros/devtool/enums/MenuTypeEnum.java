@@ -10,7 +10,11 @@ public enum  MenuTypeEnum {
 
     TEXT("text"),
     CLIPBOARD_HISTORY("clipboardHistory"),
+    MEMORANDUM("MEMORANDUM"),
 
+
+    FORMAT("format"),
+    JSON_FORMAT("jsonFormat"),
     ;
 
     public String getType() {

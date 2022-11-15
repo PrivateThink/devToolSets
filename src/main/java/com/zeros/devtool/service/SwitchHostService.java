@@ -8,6 +8,7 @@ import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
 import com.zeros.devtool.enums.MenuTypeEnum;
 import com.zeros.devtool.utils.*;
+import com.zeros.devtool.utils.view.ViewUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -22,10 +23,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +36,6 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -61,16 +59,13 @@ public class SwitchHostService {
     private static final List<String> hostFileName = new ArrayList<>();
 
 
-    //获取网络的树形菜单
-    private TreeItem<Node> getNetWorkRootTreeItem() {
-        //网络
-        TreeItem<Node> network = new TreeItem<>(this.getTreeItem(MenuTypeEnum.NETWORK.getType(), Constants.NETWORK));
-        network.setExpanded(true);
+    //获取host的树形菜单
+    public TreeItem<Node> getHostRootTreeItem() {
+
         //切换host
-        TreeItem<Node> switchHost = new TreeItem<>(this.getTreeItem(MenuTypeEnum.SWITCH_HOST.getType(), Constants.SWITCH_HOST));
+        TreeItem<Node> switchHost = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.SWITCH_HOST.getType(), Constants.SWITCH_HOST));
         //系统当前的host
-        TreeItem<Node> currentHostItem = new TreeItem<>(this.getTreeItem(MenuTypeEnum.CURRENT_HOST.getType(), Constants.CURRENT_HOST));
-        network.getChildren().add(switchHost);
+        TreeItem<Node> currentHostItem = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.CURRENT_HOST.getType(), Constants.CURRENT_HOST));
 
 
         currentHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -79,11 +74,6 @@ public class SwitchHostService {
 
                 //加载系统当前的host
                 if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-//                    if (hostTableExist(Constants.CURRENT_HOST)) {
-//                        //点击切换host tab
-//                        switchHostTab(Constants.CURRENT_HOST);
-//                        return;
-//                    }
                     String hostFile = "";
                     if (SystemUtils.isWindows()) {
                         hostFile = FileConstants.WIN_HOST;
@@ -121,7 +111,7 @@ public class SwitchHostService {
         });
 
 
-        return network;
+        return switchHost;
     }
 
     public void loadHost(TreeItem<Node> switchHost) {
@@ -160,7 +150,7 @@ public class SwitchHostService {
                 codeAreaFile.put(area, hostFile.getAbsolutePath());
                 String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + hostFile.getName();
                 if (!existItem(switchHost, name)) {
-                    TreeItem<Node> newHostItem = new TreeItem<>(getTreeItemWithSwitch(hostType, name));
+                    TreeItem<Node> newHostItem = new TreeItem<>(ViewUtil.getTreeItemWithSwitch(hostType, name));
                     switchHost.getChildren().add(newHostItem);
                     newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
@@ -172,11 +162,11 @@ public class SwitchHostService {
                         }
                     });
                     //添加菜单
-                    Label hostLabel = getHostLabel(newHostItem);
+                    Label hostLabel = ViewUtil.getLabel(newHostItem);
                     setHostItemMenu(hostLabel);
 
                     //设置切换按钮事件
-                    ToggleSwitch toggleSwitch = getHostToggleSwitch(newHostItem);
+                    ToggleSwitch toggleSwitch = ViewUtil.getToggleSwitch(newHostItem);
 
                     toggleSwitch.selectedProperty().addListener(new ChangeListener<Boolean>() {
                         @Override
@@ -196,8 +186,8 @@ public class SwitchHostService {
         ObservableList<TreeItem<Node>> items = switchHost.getChildren();
         if (CollectionUtils.isNotEmpty(items)) {
             for (TreeItem<Node> item : items) {
-                Label label = getHostLabel(item);
-                ToggleSwitch itemSwitch = getHostToggleSwitch(item);
+                Label label = ViewUtil.getLabel(item);
+                ToggleSwitch itemSwitch = ViewUtil.getToggleSwitch(item);
                 //如果toggleSwitch是被选中的，则将其他切换为未被选中选中
                 if (itemSwitch != null && !itemSwitch.equals(toggleSwitch) && newSelect) {
                     itemSwitch.setSelected(false);
@@ -220,7 +210,7 @@ public class SwitchHostService {
     }
 
     private void setHostFileMenu(TreeItem<Node> switchHost) {
-        Label label = getHostLabel(switchHost);
+        Label label = ViewUtil.getLabel(switchHost);
         if (label.getContextMenu() != null) {
             return;
         }
@@ -244,6 +234,7 @@ public class SwitchHostService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        hostFileStage.initStyle(StageStyle.UTILITY);
         hostFileStage.show();
 
         GridPane hostFileGridPane = hostFileNameLoader.getRoot();
@@ -280,82 +271,6 @@ public class SwitchHostService {
         cancel.setOnMouseClicked(cancelEvent -> {
             hostFileStage.close();
         });
-    }
-
-    private TreeItem<Node> getTextRootTreeItem() {
-        TreeItem<Node> text = new TreeItem<>(this.getTreeItem(MenuTypeEnum.TEXT.getType(), Constants.TEXT));
-        text.setExpanded(true);
-        TreeItem<Node> clipboardHistory = new TreeItem<>(this.getTreeItem(MenuTypeEnum.CLIPBOARD_HISTORY.getType(), Constants.CLIPBOARD_HISTORY));
-        text.getChildren().add(clipboardHistory);
-        return text;
-    }
-
-    private TreeItem<Node> getRootTreeItem() {
-        TreeItem<Node> text = new TreeItem<>(this.getTreeItem(MenuTypeEnum.ALL.getType(), Constants.ALL));
-        return text;
-    }
-
-    //获取树形菜单
-    public void loadMenu(TreeView<Node> rootTree) {
-        //网络
-        TreeItem<Node> network = this.getNetWorkRootTreeItem();
-        //文本
-        TreeItem<Node> text = this.getTextRootTreeItem();
-        //全部
-        TreeItem<Node> all = this.getRootTreeItem();
-        all.getChildren().add(network);
-        all.getChildren().add(text);
-        all.setExpanded(true);
-        rootTree.setRoot(all);
-    }
-
-
-    public HBox getTreeItemWithSwitch(String id, String text) {
-        HBox hBox = new HBox();
-        Label label = new Label();
-        label.setMaxWidth(120);
-        label.setPrefWidth(120);
-        HBox.setHgrow(label, Priority.ALWAYS);
-        label.setTextAlignment(TextAlignment.CENTER);
-        label.setId(id);
-        label.setText(text);
-        hBox.getChildren().add(label);
-        ToggleSwitch toggleSwitch = new ToggleSwitch();
-        hBox.getChildren().add(toggleSwitch);
-
-        return hBox;
-    }
-
-    public HBox getTreeItem(String id, String text) {
-        HBox hBox = new HBox();
-        Label label = new Label();
-        label.setTextAlignment(TextAlignment.CENTER);
-        label.setId(id);
-        label.setText(text);
-        hBox.getChildren().add(label);
-        return hBox;
-    }
-
-    public Label getHostLabel(TreeItem<Node> treeItem) {
-        Label label = null;
-        HBox hBox = (HBox) treeItem.getValue();
-        ObservableList<Node> hBoxChildren = hBox.getChildren();
-        if (CollectionUtils.isNotEmpty(hBoxChildren)) {
-            label = (Label) hBoxChildren.get(0);
-        }
-        return label;
-    }
-
-    public ToggleSwitch getHostToggleSwitch(TreeItem<Node> treeItem) {
-        ToggleSwitch toggleSwitch = null;
-        HBox hBox = (HBox) treeItem.getValue();
-        ObservableList<Node> hBoxChildren = hBox.getChildren();
-        if (CollectionUtils.isNotEmpty(hBoxChildren)) {
-            if (hBoxChildren.size() >= 2) {
-                toggleSwitch = (ToggleSwitch) hBoxChildren.get(1);
-            }
-        }
-        return toggleSwitch;
     }
 
 
@@ -469,6 +384,9 @@ public class SwitchHostService {
         Tab tab = this.getHostTab(text);
         if (tab != null) {
             SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
+            //设置为tabPane
+            IndexController indexController = ControllerMangerUtil.getIndexController();
+            indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
             //切换host tab
             if (!hostTableExist(text)) {
                 switchHostController.getTabPaneMain().getTabs().add(tab);
@@ -550,7 +468,7 @@ public class SwitchHostService {
         SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
         addHostTab(fileName, switchHostController.getTabPaneMain());
         String hostType = MenuTypeEnum.SWITCH_HOST.getType() + "_" + index;
-        TreeItem<Node> newHostItem = new TreeItem<>(this.getTreeItemWithSwitch(hostType, fileName));
+        TreeItem<Node> newHostItem = new TreeItem<>(ViewUtil.getTreeItemWithSwitch(hostType, fileName));
         TreeItem<Node> switchHost = this.getSwitchHost();
         switchHost.getChildren().add(newHostItem);
         newHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -564,7 +482,7 @@ public class SwitchHostService {
         });
 
         //添加host切换事件
-        ToggleSwitch toggleSwitch = getHostToggleSwitch(newHostItem);
+        ToggleSwitch toggleSwitch = ViewUtil.getToggleSwitch(newHostItem);
         toggleSwitch.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldSelect, Boolean newSelect) {
@@ -581,7 +499,7 @@ public class SwitchHostService {
             e.printStackTrace();
         }
         //添加菜单
-        Label label = getHostLabel(newHostItem);
+        Label label = ViewUtil.getLabel(newHostItem);
         setHostItemMenu(label);
     }
 
@@ -619,7 +537,7 @@ public class SwitchHostService {
         }
         ObservableList<TreeItem<Node>> items = treeItem.getChildren();
         for (TreeItem<Node> item : items) {
-            Label label = getHostLabel(item);
+            Label label = ViewUtil.getLabel(item);
             if (label.getText().equals(name)) {
                 return true;
             }
@@ -677,15 +595,12 @@ public class SwitchHostService {
         ObservableList<TreeItem<Node>> items = switchHost.getChildren();
         if (CollectionUtils.isNotEmpty(items)) {
             items.removeIf(treeItem -> {
-                Label label = getHostLabel(treeItem);
+                Label label = ViewUtil.getLabel(treeItem);
                 return label.getText().equals(text);
             });
         }
     }
 
-    private void setToggleSwitch(TreeItem<Node> switchHost) {
-
-    }
 
     private String getCodeAreaTextWithFileName(String fileName) {
         Collection<CodeArea> codeAreas = codeAreaFile.keySet();
@@ -697,5 +612,12 @@ public class SwitchHostService {
             }
         }
         return "";
+    }
+
+
+    public void setIndexPaneCenter(){
+        SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
+        IndexController indexController = ControllerMangerUtil.getIndexController();
+        indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
     }
 }
