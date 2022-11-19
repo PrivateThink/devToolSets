@@ -4,6 +4,7 @@ package com.zeros.devtool.controller.network;
 import com.zeros.devtool.service.SwitchHostService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 
+import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.network.SwitchHostView;
 
 
@@ -33,7 +34,7 @@ public class SwitchHostController extends SwitchHostView {
         switchHostService.handleTabPaneEvent(tabPaneMain);
 
         tabPaneMain.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
-            switchHostService.setMenuItemVisible(tabPaneMain);
+            ViewUtil.setMenuItemVisible(tabPaneMain,0);
         });
 
     }

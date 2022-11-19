@@ -427,15 +427,10 @@ public class SwitchHostService {
     }
 
     public void handleTabPaneEvent(TabPane tabPaneMain) {
-        ContextMenu contextMenu = new ContextMenu();
-        MenuItem closeMenuItem = new MenuItem("关闭选中");
-        MenuItem closeAllMenuItem = new MenuItem("关闭所有");
-        MenuItem closeOtherMenuItem = new MenuItem("关闭其他");
-        contextMenu.getItems().add(closeMenuItem);
-        contextMenu.getItems().add(closeAllMenuItem);
-        contextMenu.getItems().add(closeOtherMenuItem);
+        ContextMenu closeMenu = ViewUtil.getCloseMenu();
 
         //关闭选中监听
+        MenuItem closeMenuItem = closeMenu.getItems().get(0);
         closeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -444,6 +439,7 @@ public class SwitchHostService {
         });
 
         //关闭全部
+        MenuItem closeAllMenuItem = closeMenu.getItems().get(1);
         closeAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -452,6 +448,7 @@ public class SwitchHostService {
         });
 
         //关闭其他监听
+        MenuItem closeOtherMenuItem = closeMenu.getItems().get(2);
         closeOtherMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -460,7 +457,7 @@ public class SwitchHostService {
 
         });
 
-        tabPaneMain.setContextMenu(contextMenu);
+        tabPaneMain.setContextMenu(closeMenu);
     }
 
     public void addHostAndFile(String fileName) {

@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import org.fxmisc.richtext.CodeArea?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.zeros.devtool.controller.format.JsonFormatController">
@@ -14,8 +13,7 @@
             <HBox>
                 <TextArea fx:id="jsonText" HBox.hgrow="ALWAYS">
                 </TextArea>
-                <TextArea  fx:id="formatText" HBox.hgrow="ALWAYS">
-                </TextArea>
+                <TextArea  fx:id="formatText" HBox.hgrow="ALWAYS"/>
             </HBox>
         </Tab>
     </TabPane>

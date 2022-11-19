@@ -4,8 +4,7 @@ import com.zeros.devtool.constants.Constants;
 import com.zeros.devtool.enums.MenuTypeEnum;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
@@ -92,6 +91,33 @@ public class ViewUtil {
         text.getChildren().add(clipboardHistory);
         text.getChildren().add(memorandum);
         return text;
+    }
+
+    public static ContextMenu getCloseMenu(){
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem closeMenuItem = new MenuItem("关闭选中");
+        MenuItem closeAllMenuItem = new MenuItem("关闭所有");
+        MenuItem closeOtherMenuItem = new MenuItem("关闭其他");
+        contextMenu.getItems().add(closeMenuItem);
+        contextMenu.getItems().add(closeAllMenuItem);
+        contextMenu.getItems().add(closeOtherMenuItem);
+        return contextMenu;
+    }
+
+
+    public static void setMenuItemVisible(TabPane tabPaneMain,int size) {
+
+        //如果只剩下当前系统页面和添加host页面，则隐藏菜单
+        ContextMenu contextMenu = tabPaneMain.getContextMenu();
+        if (tabPaneMain.getTabs().size() <= size) {
+            for (MenuItem item : contextMenu.getItems()) {
+                item.setVisible(false);
+            }
+        } else {
+            for (MenuItem item : contextMenu.getItems()) {
+                item.setVisible(true);
+            }
+        }
     }
 
 }
