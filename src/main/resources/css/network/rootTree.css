@@ -1,0 +1,5 @@
+.tree-view {
+    -fx-text-background-color: black ;
+    -fx-background-color: transparent ;
+    -fx-selection-bar: #EEEEEE ;
+}
