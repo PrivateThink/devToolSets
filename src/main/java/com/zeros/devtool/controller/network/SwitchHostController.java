@@ -20,8 +20,8 @@ public class SwitchHostController extends SwitchHostView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initView();
         initService();
+        initView();
         initEvent();
     }
 

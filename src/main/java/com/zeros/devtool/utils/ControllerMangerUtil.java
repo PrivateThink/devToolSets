@@ -4,6 +4,7 @@ import com.zeros.devtool.constants.FxmlConstant;
 import com.zeros.devtool.controller.format.JsonFormatController;
 import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
+import com.zeros.devtool.controller.system.PortCheckController;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
@@ -57,6 +58,21 @@ public class ControllerMangerUtil {
             }
             controller = fxmlLoader.getController();
             ControllerMangerUtil.setController(JsonFormatController.class.getName(), controller);
+        }
+        return controller;
+    }
+
+    public static PortCheckController getPortCheckController() {
+        PortCheckController controller = (PortCheckController) ControllerMangerUtil.getController(PortCheckController.class.getName());
+        if (controller == null) {
+            FXMLLoader fxmlLoader = FXMLLoaderUtils.getFXMLLoader(FxmlConstant.PORT_CHECk_HOST);
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            controller = fxmlLoader.getController();
+            ControllerMangerUtil.setController(PortCheckController.class.getName(), controller);
         }
         return controller;
     }

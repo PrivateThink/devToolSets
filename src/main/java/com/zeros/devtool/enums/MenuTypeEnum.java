@@ -15,6 +15,10 @@ public enum  MenuTypeEnum {
 
     FORMAT("format"),
     JSON_FORMAT("jsonFormat"),
+
+
+    SYSTEM("system"),
+    PORT_CHECK("portCheck")
     ;
 
     public String getType() {

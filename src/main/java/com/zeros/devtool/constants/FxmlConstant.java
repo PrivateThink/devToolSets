@@ -10,4 +10,6 @@ public class FxmlConstant {
 
     public static final String JSON_FORMAT_HOST= "/fxml/format/jsonFormat.fxml";
 
+    public static final String PORT_CHECk_HOST= "/fxml/system/portCheck.fxml";
+
 }

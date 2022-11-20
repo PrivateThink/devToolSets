@@ -38,7 +38,6 @@ public class JsonFormatService {
     // textarea中光标的位置
     private int position = 0;
 
-    private volatile boolean addTabFlag = true;
 
 
     public TreeItem<Node> getJsonFormatTreeItem(){

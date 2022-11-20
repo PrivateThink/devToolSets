@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableColumn?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="portPane"
+            fx:controller="com.zeros.devtool.controller.system.PortCheckController">
+
+    <BorderPane fx:id="borderPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+        <top>
+            <HBox spacing="10" alignment="CENTER">
+                <TextField HBox.hgrow="ALWAYS" fx:id="portTextFile" promptText="输入端口">
+                    <HBox.margin>
+                        <Insets  left="20" top="10" bottom="10"/>
+                    </HBox.margin>
+                </TextField>
+                <Button fx:id="findButton" text="查询">
+                    <HBox.margin>
+                        <Insets  left="10" top="10" bottom="10" right="20"/>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+        </top>
+
+        <center>
+            <TableView fx:id="portTableView">
+                <columns>
+                    <TableColumn fx:id="processName" editable="false"  text="程序名" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="pid"  editable="false" text="PID" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="port" editable="false" text="端口" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="status" editable="false" text="状态" style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="operator"  editable="false" text="操作" style="-fx-alignment: CENTER;"/>
+                </columns>
+            </TableView>
+        </center>
+
+
+    </BorderPane>
+
+
+
+
+</AnchorPane>

@@ -69,6 +69,11 @@ public class ViewUtil {
         return text;
     }
 
+    public static TreeItem<Node> getSystemTreeItem() {
+        TreeItem<Node> system = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.SYSTEM.getType(), Constants.SYSTEM));
+        return system;
+    }
+
     public static TreeItem<Node> getNetworkTreeItem() {
         //网络
         TreeItem<Node> network = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.NETWORK.getType(), Constants.NETWORK));

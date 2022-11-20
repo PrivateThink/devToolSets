@@ -43,6 +43,9 @@ public class Constants {
     public static final String  JSON_FORMAT ="Json格式化";
 
 
+    //=======================系统================================
 
+    public static final String  SYSTEM ="系统";
+    public static final String  PORT_CHECK ="端口列表";
 
 }

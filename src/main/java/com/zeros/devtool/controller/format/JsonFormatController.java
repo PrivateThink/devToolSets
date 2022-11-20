@@ -34,9 +34,9 @@ public class JsonFormatController extends JsonFormatView {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initService();
         initView();
         initEvent();
-        initService();
     }
 
     private void initView() {
