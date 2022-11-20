@@ -77,20 +77,20 @@ public class ViewUtil {
     public static TreeItem<Node> getNetworkTreeItem() {
         //网络
         TreeItem<Node> network = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.NETWORK.getType(), Constants.NETWORK));
-        network.setExpanded(true);
+        //network.setExpanded(true);
         return network;
     }
 
     public static TreeItem<Node> getFormatTreeItem() {
         TreeItem<Node> format = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.FORMAT.getType(), Constants.FORMAT));
-        format.setExpanded(true);
+        //format.setExpanded(true);
         return format;
     }
 
 
     private TreeItem<Node> getTextRootTreeItem() {
         TreeItem<Node> text = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.TEXT.getType(), Constants.TEXT));
-        text.setExpanded(true);
+        //text.setExpanded(true);
         TreeItem<Node> clipboardHistory = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.CLIPBOARD_HISTORY.getType(), Constants.CLIPBOARD_HISTORY));
         TreeItem<Node> memorandum = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.MEMORANDUM.getType(), Constants.MEMORANDUM));
         text.getChildren().add(clipboardHistory);
