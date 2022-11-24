@@ -9,15 +9,13 @@
 
     <TabPane fx:id="tabPaneMain" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" tabClosingPolicy="ALL_TABS">
-        <Tab text="选项卡">
-            <HBox>
-                <TextArea fx:id="jsonText" HBox.hgrow="ALWAYS">
+        <Tab text="选项卡" >
+            <HBox fx:id="jsonHBox" spacing="5">
+                <TextArea fx:id="jsonText" HBox.hgrow="ALWAYS" >
                 </TextArea>
                 <TextArea  fx:id="formatText" HBox.hgrow="ALWAYS"/>
             </HBox>
         </Tab>
     </TabPane>
-
-
 
 </AnchorPane>

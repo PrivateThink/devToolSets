@@ -15,6 +15,8 @@ public enum  MenuTypeEnum {
 
     FORMAT("format"),
     JSON_FORMAT("jsonFormat"),
+    SQL_FORMAT("sqlFormat"),
+    XML_FORMAT("xmlFormat"),
 
 
     SYSTEM("system"),

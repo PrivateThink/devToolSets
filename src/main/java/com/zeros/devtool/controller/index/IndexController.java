@@ -1,9 +1,7 @@
 package com.zeros.devtool.controller.index;
 
 import com.zeros.devtool.constants.CssConstants;
-import com.zeros.devtool.service.JsonFormatService;
-import com.zeros.devtool.service.PortCheckService;
-import com.zeros.devtool.service.SwitchHostService;
+import com.zeros.devtool.service.*;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.CssLoadUtil;
 import com.zeros.devtool.utils.view.ViewUtil;
@@ -24,6 +22,11 @@ public class IndexController extends IndexView {
     private final JsonFormatService jsonFormatService = new JsonFormatService();
 
     private final PortCheckService portCheckService = new PortCheckService();
+
+
+    private final SQLFormatService sqlFormatService = new SQLFormatService();
+
+    private final XMLFormatService xmlFormatService = new XMLFormatService();
 
 
 
@@ -67,7 +70,11 @@ public class IndexController extends IndexView {
     private TreeItem<Node> getFormatTreeItem(){
         TreeItem<Node> format = ViewUtil.getFormatTreeItem();
         TreeItem<Node> jsonFormatTreeItem = jsonFormatService.getJsonFormatTreeItem();
+        TreeItem<Node> sqlFormatTreeItem = sqlFormatService.getSqlFormatTreeItem();
+        TreeItem<Node> xmlFormatTreeItem = xmlFormatService.getSqlFormatTreeItem();
         format.getChildren().add(jsonFormatTreeItem);
+        format.getChildren().add(sqlFormatTreeItem);
+        format.getChildren().add(xmlFormatTreeItem);
         return format;
     }
 

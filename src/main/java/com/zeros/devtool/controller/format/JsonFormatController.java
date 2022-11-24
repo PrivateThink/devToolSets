@@ -2,18 +2,10 @@ package com.zeros.devtool.controller.format;
 
 import com.zeros.devtool.service.JsonFormatService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
-import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.format.JsonFormatView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -27,7 +19,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class JsonFormatController extends JsonFormatView {
-
 
     JsonFormatService jsonFormatService = new JsonFormatService();
 
