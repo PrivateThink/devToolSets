@@ -3,13 +3,9 @@ package com.zeros.devtool.controller.network;
 
 import com.zeros.devtool.service.SwitchHostService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
-
 import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.network.SwitchHostView;
-
-
 import java.net.URL;
-
 import java.util.*;
 
 
@@ -20,8 +16,8 @@ public class SwitchHostController extends SwitchHostView {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initView();
         initService();
+        initView();
         initEvent();
     }
 

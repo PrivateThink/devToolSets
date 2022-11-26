@@ -5,8 +5,7 @@
 <?import javafx.scene.control.TabPane?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.zeros.devtool.controller.network.SwitchHostController"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="com.zeros.devtool.controller.network.SwitchHostController">
 
 
     <TabPane fx:id="tabPaneMain" tabClosingPolicy="ALL_TABS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"

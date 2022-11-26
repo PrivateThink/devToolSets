@@ -38,7 +38,6 @@ public class JsonFormatService {
     // textarea中光标的位置
     private int position = 0;
 
-    private volatile boolean addTabFlag = true;
 
 
     public TreeItem<Node> getJsonFormatTreeItem(){
@@ -51,6 +50,7 @@ public class JsonFormatService {
                     JsonFormatController jsonFormatController = ControllerMangerUtil.getJsonFormatController();
                     IndexController indexController = ControllerMangerUtil.getIndexController();
                     indexController.getIndexPane().setCenter(jsonFormatController.getTabPaneMain());
+                    jsonFormatController.getJsonHBox().setPadding(new Insets(5,10,10,10));
                 }
             }
         });
@@ -78,6 +78,8 @@ public class JsonFormatService {
         if(newTab == addTab) {
             HBox hBox = new HBox();
             TextArea leftArea = new TextArea();
+            hBox.setSpacing(5);
+            hBox.setPadding(new Insets(5,10,10,10));
             TextArea rightArea = new TextArea();
             leftArea.textProperty().addListener(new ChangeListener<String>() {
                 @Override
@@ -87,11 +89,10 @@ public class JsonFormatService {
             });
 
             HBox.setHgrow(leftArea, Priority.ALWAYS);
-            HBox.setHgrow(rightArea,Priority.ALWAYS);
+            HBox.setHgrow(rightArea, Priority.ALWAYS);
             hBox.getChildren().addAll(leftArea, rightArea);
             Tab tab = new Tab("选项卡");
             tab.setContent(hBox);
-            int size = tabPane.getTabs().size();
             tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
             tabPane.getSelectionModel().select(tabPane.getTabs().size() - 2);
         }

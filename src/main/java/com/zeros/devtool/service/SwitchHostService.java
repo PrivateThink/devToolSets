@@ -1,9 +1,7 @@
 package com.zeros.devtool.service;
 
-import com.zeros.devtool.constants.Constants;
-import com.zeros.devtool.constants.CssConstants;
-import com.zeros.devtool.constants.FileConstants;
-import com.zeros.devtool.constants.FxmlConstant;
+import cn.hutool.core.util.RuntimeUtil;
+import com.zeros.devtool.constants.*;
 import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
 import com.zeros.devtool.enums.MenuTypeEnum;
@@ -274,7 +272,7 @@ public class SwitchHostService {
     }
 
 
-    //初始出host显示的文本
+    //初始化host显示的文本
     public void initHostArea(CodeArea hostArea) {
 
         hostArea.setParagraphGraphicFactory(LineNumberFactory.get(hostArea));
@@ -318,6 +316,8 @@ public class SwitchHostService {
                 try {
                     FileUtils.writeStringToFile(new File(codeAreaFile.get(hostArea)), hostArea.getText(), "UTF-8");
                     ToastUtil.toast("保存host成功", 2000);
+                    //刷新
+                    RuntimeUtil.exec(CmdConstants.IP_CONFIG_FLUSH);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -512,20 +512,6 @@ public class SwitchHostService {
         tabPaneMain.getTabs().removeIf(tab -> !tab.selectedProperty().getValue());
     }
 
-    public void setMenuItemVisible(TabPane tabPaneMain) {
-
-        //如果只剩下当前系统页面和添加host页面，则隐藏菜单
-        ContextMenu contextMenu = tabPaneMain.getContextMenu();
-        if (tabPaneMain.getTabs().size() <= 0) {
-            for (MenuItem item : contextMenu.getItems()) {
-                item.setVisible(false);
-            }
-        } else {
-            for (MenuItem item : contextMenu.getItems()) {
-                item.setVisible(true);
-            }
-        }
-    }
 
     public boolean existItem(TreeItem<Node> treeItem, String name) {
 
@@ -611,10 +597,4 @@ public class SwitchHostService {
         return "";
     }
 
-
-    public void setIndexPaneCenter(){
-        SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
-        IndexController indexController = ControllerMangerUtil.getIndexController();
-        indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
-    }
 }

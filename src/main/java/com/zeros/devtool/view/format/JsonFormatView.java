@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.HBox;
 import lombok.Data;
 
 @Data
@@ -17,5 +18,8 @@ public abstract class JsonFormatView implements Initializable {
 
     @FXML
     protected TextArea formatText;
+
+    @FXML
+    public HBox jsonHBox;
 
 }
