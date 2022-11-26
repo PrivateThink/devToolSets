@@ -2,10 +2,15 @@ package com.zeros.devtool.controller.index;
 
 import com.zeros.devtool.constants.CssConstants;
 import com.zeros.devtool.service.*;
+import com.zeros.devtool.service.format.HTMLFormatService;
+import com.zeros.devtool.service.format.JsonFormatService;
+import com.zeros.devtool.service.format.SQLFormatService;
+import com.zeros.devtool.service.format.XMLFormatService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.CssLoadUtil;
 import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.IndexView;
+import com.zeros.devtool.view.format.HTMLFormatView;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 
@@ -27,6 +32,8 @@ public class IndexController extends IndexView {
     private final SQLFormatService sqlFormatService = new SQLFormatService();
 
     private final XMLFormatService xmlFormatService = new XMLFormatService();
+
+    private final HTMLFormatService htmlFormatService = new HTMLFormatService();
 
 
 
@@ -72,9 +79,11 @@ public class IndexController extends IndexView {
         TreeItem<Node> jsonFormatTreeItem = jsonFormatService.getJsonFormatTreeItem();
         TreeItem<Node> sqlFormatTreeItem = sqlFormatService.getSqlFormatTreeItem();
         TreeItem<Node> xmlFormatTreeItem = xmlFormatService.getSqlFormatTreeItem();
+        TreeItem<Node> htmlFormatTreeItem = htmlFormatService.getHtmlFormatTreeItem();
         format.getChildren().add(jsonFormatTreeItem);
         format.getChildren().add(sqlFormatTreeItem);
         format.getChildren().add(xmlFormatTreeItem);
+        format.getChildren().add(htmlFormatTreeItem);
         return format;
     }
 

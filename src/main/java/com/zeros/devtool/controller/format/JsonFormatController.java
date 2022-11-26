@@ -1,6 +1,6 @@
 package com.zeros.devtool.controller.format;
 
-import com.zeros.devtool.service.JsonFormatService;
+import com.zeros.devtool.service.format.JsonFormatService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.format.JsonFormatView;

@@ -1,6 +1,6 @@
 package com.zeros.devtool.controller.format;
 
-import com.zeros.devtool.service.XMLFormatService;
+import com.zeros.devtool.service.format.XMLFormatService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.format.XMLFormatView;
@@ -58,7 +58,7 @@ public class XMLFormatController extends XMLFormatView {
             formatXML.setText("");
         });
 
-        copyXML.setOnAction(event -> {
+        copyFormatXML.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             ClipboardContent clipboardContent = new ClipboardContent();
             clipboardContent.putString(formatXML.getText());

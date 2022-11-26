@@ -33,7 +33,7 @@ public abstract class XMLFormatView implements Initializable {
     protected Button clearFormatXML;
 
     @FXML
-    protected Button copyXML;
+    protected Button copyFormatXML;
 
     @FXML
     protected TextArea formatXML;

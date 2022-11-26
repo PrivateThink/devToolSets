@@ -14,6 +14,8 @@ public class FxmlConstant {
 
     public static final String XML_FORMAT= "/fxml/format/xmlFormat.fxml";
 
+    public static final String HTMl_FORMAT= "/fxml/format/htmlFormat.fxml";
+
     public static final String PORT_CHECK= "/fxml/system/portCheck.fxml";
 
 }

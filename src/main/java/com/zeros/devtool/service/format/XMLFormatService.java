@@ -1,4 +1,4 @@
-package com.zeros.devtool.service;
+package com.zeros.devtool.service.format;
 
 import cn.hutool.core.util.XmlUtil;
 import com.zeros.devtool.constants.Constants;
@@ -38,14 +38,14 @@ public class XMLFormatService {
     }
 
 
-    public void formatXML(TextArea rawSql, TextArea formatSql) {
-        if (StringUtils.isNotEmpty(rawSql.getText())){
+    public void formatXML(TextArea rawXml, TextArea formatXml) {
+        if (StringUtils.isNotEmpty(rawXml.getText())){
             try {
-                Document document = XmlUtil.parseXml(rawSql.getText());
+                Document document = XmlUtil.parseXml(rawXml.getText());
                 String format = XmlUtil.toStr(document,true);
-                formatSql.setText(format);
+                formatXml.setText(format);
             }catch (Exception e){
-                formatSql.setText(e.getMessage());
+                formatXml.setText(e.getMessage());
             }
 
         }

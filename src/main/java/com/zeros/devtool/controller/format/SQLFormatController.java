@@ -1,6 +1,6 @@
 package com.zeros.devtool.controller.format;
 
-import com.zeros.devtool.service.SQLFormatService;
+import com.zeros.devtool.service.format.SQLFormatService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.format.SQLFormatView;

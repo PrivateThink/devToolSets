@@ -43,6 +43,7 @@ public class Constants {
     public static final String  JSON_FORMAT ="JSON格式化";
     public static final String  SQL_FORMAT ="SQL格式化";
     public static final String  XML_FORMAT ="XML格式化";
+    public static final String  HTML_FORMAT ="HTML格式化";
 
 
 

@@ -1,6 +1,7 @@
 package com.zeros.devtool.utils;
 
 import com.zeros.devtool.constants.FxmlConstant;
+import com.zeros.devtool.controller.format.HTMLFormatController;
 import com.zeros.devtool.controller.format.JsonFormatController;
 import com.zeros.devtool.controller.format.SQLFormatController;
 import com.zeros.devtool.controller.format.XMLFormatController;
@@ -105,6 +106,21 @@ public class ControllerMangerUtil {
             }
             controller = fxmlLoader.getController();
             ControllerMangerUtil.setController(XMLFormatController.class.getName(), controller);
+        }
+        return controller;
+    }
+
+    public static HTMLFormatController getHTMLFormatController() {
+        HTMLFormatController controller = (HTMLFormatController) ControllerMangerUtil.getController(HTMLFormatController.class.getName());
+        if (controller == null) {
+            FXMLLoader fxmlLoader = FXMLLoaderUtils.getFXMLLoader(FxmlConstant.HTMl_FORMAT);
+            try {
+                fxmlLoader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            controller = fxmlLoader.getController();
+            ControllerMangerUtil.setController(HTMLFormatController.class.getName(), controller);
         }
         return controller;
     }

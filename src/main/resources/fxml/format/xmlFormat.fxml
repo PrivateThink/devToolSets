@@ -45,7 +45,7 @@
                             <Insets top="10" bottom="10"/>
                         </HBox.margin>
                     </Button>
-                    <Button fx:id="copyXML" text="复制">
+                    <Button fx:id="copyFormatXML" text="复制">
                         <HBox.margin>
                             <Insets top="10" bottom="10" right="10"/>
                         </HBox.margin>

@@ -1,4 +1,4 @@
-package com.zeros.devtool.service;
+package com.zeros.devtool.service.format;
 
 import com.alibaba.druid.DbType;
 import com.zeros.devtool.constants.Constants;
