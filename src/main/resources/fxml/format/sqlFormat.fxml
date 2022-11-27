@@ -9,7 +9,6 @@
 <AnchorPane fx:id="sqlAnchorPane"
             xmlns="http://javafx.com/javafx/10.0.2-internal"
             xmlns:fx="http://javafx.com/fxml/1"
-            stylesheets="@/css/splitPane.css"
             fx:controller="com.zeros.devtool.controller.format.SQLFormatController">
 
     <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">

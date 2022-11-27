@@ -8,16 +8,6 @@ public class Constants {
 
 
 
-    public static final String KEYWORD_PATTERN =
-            "([1-9]|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])(\\.(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])){3}\\b";
-
-    public static final String COMMENT_PATTERN = "#[^\n]*";
-
-    public static final Pattern PATTERN = Pattern
-            .compile("(?<KEYWORD>" + KEYWORD_PATTERN + ")" + "|(?<COMMENT>" + COMMENT_PATTERN + ")");
-
-
-
 
 
     public static final String  ALL ="全部";

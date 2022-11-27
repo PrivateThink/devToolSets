@@ -1,0 +1,23 @@
+.hostKeyword {
+    -fx-fill: #0080ff;
+    -fx-font-weight: bold;
+}
+
+.hostComment {
+    -fx-fill: #008040;
+}
+
+
+.htmlKeyword {
+    -fx-fill: #0080ff;
+    -fx-font-weight: bold;
+}
+
+.htmlComment {
+    -fx-fill: #008040;
+}
+
+
+/*.code-area {*/
+/*    -fx-font-family: "Fira Code", Consolas, monospace;*/
+/*}*/

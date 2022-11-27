@@ -222,39 +222,8 @@ public class SwitchHostService {
     public void initHostArea(CodeArea hostArea) {
 
         hostArea.setParagraphGraphicFactory(LineNumberFactory.get(hostArea));
-        hostArea.getStylesheets().add(CssLoadUtil.getResourceUrl(CssConstants.SWITCH_HOST_CSS));
-        hostArea.richChanges()
-                .filter(ch -> !ch.getInserted().equals(ch.getRemoved()))
-                .successionEnds(Duration.ofMillis(500))
-                .supplyTask(new Supplier<Task<StyleSpans<Collection<String>>>>() {
-                    @Override
-                    public Task<StyleSpans<Collection<String>>> get() {
-                        String text = hostArea.getText();
-                        Task<StyleSpans<Collection<String>>> task = new Task<StyleSpans<Collection<String>>>() {
-                            @Override
-                            protected StyleSpans<Collection<String>> call() throws Exception {
-                                return computeHighlighting(text);
-                            }
-                        };
-                        executor.execute(task);
-                        return task;
-                    }
-                })
-                .awaitLatest(hostArea.richChanges())
-                .filterMap(t -> {
-                    if (t.isSuccess()) {
-                        return Optional.of(t.get());
-                    } else {
-                        t.getFailure().printStackTrace();
-                        return Optional.empty();
-                    }
-                })
-                .subscribe(new Consumer<StyleSpans<Collection<String>>>() {
-                    @Override
-                    public void accept(StyleSpans<Collection<String>> highlighting) {
-                        hostArea.setStyleSpans(0, highlighting);
-                    }
-                });
+        //host 高亮
+        CodeLightUtil.setHostLight(hostArea);
 
         hostArea.setOnKeyPressed(event -> {
             //快捷键 ctrl + s
@@ -271,25 +240,6 @@ public class SwitchHostService {
         });
     }
 
-
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
-        Matcher matcher = Constants.PATTERN.matcher(text);
-        int lastKwEnd = 0;
-        StyleSpansBuilder<Collection<String>> spansBuilder
-                = new StyleSpansBuilder<>();
-        while (matcher.find()) {
-            String styleClass =
-                    matcher.group("KEYWORD") != null ? "keyword" :
-                            matcher.group("COMMENT") != null ? "comment" :
-                                    null; /* never happens */
-            assert styleClass != null;
-            spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
-            spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
-            lastKwEnd = matcher.end();
-        }
-        spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
-        return spansBuilder.create();
-    }
 
     public CodeArea addHostTab(String fileName, TabPane tabPaneMain) {
         Tab tab;

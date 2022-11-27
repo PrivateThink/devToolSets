@@ -1,6 +1,6 @@
 package com.zeros.devtool.controller.format;
 
-
+import com.zeros.devtool.utils.CodeLightUtil;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.format.HTMLFormatView;
@@ -12,11 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.jsoup.Jsoup;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HTMLFormatController extends HTMLFormatView {
+
 
 
     @Override
@@ -89,6 +89,11 @@ public class HTMLFormatController extends HTMLFormatView {
             searchHBox.setVisible(false);
             searchHBox.setManaged(false);
         });
+
+        //html 高亮
+        CodeLightUtil.setHtmlLight(rawHtml);
+        CodeLightUtil.setHtmlLight(formatHtml);
+
     }
 
     /**
