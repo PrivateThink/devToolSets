@@ -57,60 +57,6 @@ public class SwitchHostService {
     private static final List<String> hostFileName = new ArrayList<>();
 
 
-    //获取host的树形菜单
-    public TreeItem<Node> getHostRootTreeItem() {
-
-        //切换host
-        TreeItem<Node> switchHost = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.SWITCH_HOST.getType(), Constants.SWITCH_HOST));
-        //系统当前的host
-        TreeItem<Node> currentHostItem = new TreeItem<>(ViewUtil.getTreeItem(MenuTypeEnum.CURRENT_HOST.getType(), Constants.CURRENT_HOST));
-
-
-        currentHostItem.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-                //加载系统当前的host
-                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                    String hostFile = "";
-                    if (SystemUtils.isWindows()) {
-                        hostFile = FileConstants.WIN_HOST;
-                    } else {
-                        hostFile = FileConstants.MAC_HOST;
-                    }
-                    //设置为tabPane
-                    SwitchHostController switchHostController = ControllerMangerUtil.getSwitchHostController();
-                    IndexController indexController = ControllerMangerUtil.getIndexController();
-                    indexController.getIndexPane().setCenter(switchHostController.getTabPaneMain());
-
-
-                    //添加host tab
-                    CodeArea codeArea = addHostTab(Constants.CURRENT_HOST, switchHostController.getTabPaneMain());
-                    //读取host
-                    loadSystemHost(codeArea, hostFile);
-                    //选择系统当前的host
-                    switchHostTab(Constants.CURRENT_HOST);
-                }
-            }
-        });
-
-        switchHost.getValue().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                    ObservableList<TreeItem<Node>> treeItems = switchHost.getChildren();
-                    if (!treeItems.contains(currentHostItem)) {
-                        switchHost.getChildren().add(currentHostItem);
-                    }
-                    loadHost(switchHost);
-                }
-            }
-        });
-
-
-        return switchHost;
-    }
 
     public void loadHost(TreeItem<Node> switchHost) {
         //设置为tabPane
@@ -426,39 +372,6 @@ public class SwitchHostService {
         return switchHost;
     }
 
-    public void handleTabPaneEvent(TabPane tabPaneMain) {
-        ContextMenu closeMenu = ViewUtil.getCloseMenu();
-
-        //关闭选中监听
-        MenuItem closeMenuItem = closeMenu.getItems().get(0);
-        closeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                handleCloseMenuItemEvent(tabPaneMain);
-            }
-        });
-
-        //关闭全部
-        MenuItem closeAllMenuItem = closeMenu.getItems().get(1);
-        closeAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                handleCloseAllMenuItemEvent(tabPaneMain);
-            }
-        });
-
-        //关闭其他监听
-        MenuItem closeOtherMenuItem = closeMenu.getItems().get(2);
-        closeOtherMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                handleCloseOtherMenuItemEvent(tabPaneMain);
-            }
-
-        });
-
-        tabPaneMain.setContextMenu(closeMenu);
-    }
 
     public void addHostAndFile(String fileName) {
         int index = AtomicIntegerUtils.getAndIncrement();
@@ -500,17 +413,7 @@ public class SwitchHostService {
         setHostItemMenu(label);
     }
 
-    private void handleCloseMenuItemEvent(TabPane tabPaneMain) {
-        tabPaneMain.getTabs().removeIf(tab -> tab.selectedProperty().getValue());
-    }
 
-    private void handleCloseAllMenuItemEvent(TabPane tabPaneMain) {
-        tabPaneMain.getTabs().clear();
-    }
-
-    private void handleCloseOtherMenuItemEvent(TabPane tabPaneMain) {
-        tabPaneMain.getTabs().removeIf(tab -> !tab.selectedProperty().getValue());
-    }
 
 
     public boolean existItem(TreeItem<Node> treeItem, String name) {
@@ -550,10 +453,6 @@ public class SwitchHostService {
         //MenuItem updateItem = new MenuItem("修改名字");
         MenuItem deleteItem = new MenuItem("删除");
         menu.getItems().addAll(deleteItem);
-//        updateItem.setOnAction(event ->{
-//            addOrEditHostFileEvent(false);
-//        });
-
 
         deleteItem.setOnAction(event -> {
             //删除tab

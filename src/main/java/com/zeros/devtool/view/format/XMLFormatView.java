@@ -3,9 +3,7 @@ package com.zeros.devtool.view.format;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import lombok.Data;
 import org.fxmisc.richtext.CodeArea;
 
