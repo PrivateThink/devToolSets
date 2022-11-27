@@ -11,12 +11,12 @@ import javafx.event.EventHandler;
 
 import javafx.scene.Node;
 
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.fxmisc.richtext.CodeArea;
 import org.w3c.dom.Document;
 
 public class XMLFormatService {
@@ -38,14 +38,14 @@ public class XMLFormatService {
     }
 
 
-    public void formatXML(TextArea rawXml, TextArea formatXml) {
-        if (StringUtils.isNotEmpty(rawXml.getText())){
+    public void formatXML(CodeArea rawXml, CodeArea formatXml) {
+        if (StringUtils.isNotBlank(rawXml.getText())){
             try {
                 Document document = XmlUtil.parseXml(rawXml.getText());
                 String format = XmlUtil.toStr(document,true);
-                formatXml.setText(format);
+                formatXml.replaceText(format);
             }catch (Exception e){
-                formatXml.setText(e.getMessage());
+                formatXml.replaceText(e.getMessage());
             }
 
         }

@@ -5,8 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import lombok.Data;
+import org.fxmisc.richtext.CodeArea;
 
 
 @Data
@@ -35,17 +37,18 @@ public abstract class SQLFormatView implements Initializable {
     protected Button pasteSql;
 
     @FXML
-    protected TextArea rawSql;
+    protected CodeArea rawSql;
 
     @FXML
     protected Button copySql;
 
     @FXML
-    protected TextArea formatSql;
+    protected CodeArea formatSql;
 
-//    @FXML
-//    protected TextField searchField;
-//
-//    @FXML
-//    protected Button searchButton;
+
+    @FXML
+    protected BorderPane sqlLeftBorderPane;
+
+    @FXML
+    protected BorderPane sqlRightBorderPane;
 }

@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.zeros.devtool.constants.Constants;
 import com.zeros.devtool.controller.format.JsonFormatController;
 import com.zeros.devtool.controller.index.IndexController;
-import com.zeros.devtool.controller.network.SwitchHostController;
 import com.zeros.devtool.enums.MenuTypeEnum;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
@@ -13,9 +12,7 @@ import com.zeros.devtool.utils.view.ViewUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,6 +25,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 
 
 public class JsonFormatService {
@@ -57,18 +56,18 @@ public class JsonFormatService {
         return jsonFormat;
     }
 
-    public void setJsonTextEvent(String text, TextArea jsonText,TextArea formatText){
-        if (StringUtils.isNotEmpty(text)){
+    public void setJsonTextEvent(String text, CodeArea jsonText, CodeArea formatText){
+        if (StringUtils.isNotBlank(text)){
             try {
                 JSONObject object = JSONObject.parseObject(text);
                 String result = JSON.toJSONString(object, true);
-                formatText.setText(result);
-                jsonText.setText(result);
+                formatText.replaceText(result);
+                jsonText.replaceText(result);
             }catch (Exception e){
-                formatText.setText(e.getMessage());
+                formatText.replaceText(e.getMessage());
             }
         }else {
-            formatText.setText("");
+            formatText.replaceText("");
         }
 
     }
@@ -77,10 +76,10 @@ public class JsonFormatService {
 
         if(newTab == addTab) {
             HBox hBox = new HBox();
-            TextArea leftArea = new TextArea();
+            CodeArea leftArea = new CodeArea();
             hBox.setSpacing(5);
             hBox.setPadding(new Insets(5,10,10,10));
-            TextArea rightArea = new TextArea();
+            CodeArea rightArea = new CodeArea();
             leftArea.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -88,6 +87,10 @@ public class JsonFormatService {
                 }
             });
 
+            // 设置行号
+            leftArea.setParagraphGraphicFactory(LineNumberFactory.get(leftArea));
+            // 设置行号
+            rightArea.setParagraphGraphicFactory(LineNumberFactory.get(rightArea));
             HBox.setHgrow(leftArea, Priority.ALWAYS);
             HBox.setHgrow(rightArea, Priority.ALWAYS);
             hBox.getChildren().addAll(leftArea, rightArea);
@@ -98,7 +101,7 @@ public class JsonFormatService {
         }
     }
 
-    public void findText(TextArea formatText){
+    public void findText(CodeArea formatText){
         HBox searchWindow = new HBox();
         searchWindow.setSpacing(10);
         searchWindow.setPadding(new Insets(10));

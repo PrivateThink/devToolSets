@@ -6,9 +6,11 @@ import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.format.SQLFormatView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Node;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import lombok.extern.slf4j.Slf4j;
+import org.fxmisc.richtext.LineNumberFactory;
 
 
 import java.net.URL;
@@ -18,7 +20,8 @@ import java.util.ResourceBundle;
 public class SQLFormatController extends SQLFormatView {
 
 
-    private SQLFormatService sqlFormatService = new SQLFormatService();
+
+    private final SQLFormatService sqlFormatService = new SQLFormatService();
 
 
     @Override
@@ -35,6 +38,13 @@ public class SQLFormatController extends SQLFormatView {
     private void initView(){
         //设置数据库类型
         sqlFormatService.setDBType(sqlBox);
+
+
+        // 设置行号
+        rawSql.setParagraphGraphicFactory(LineNumberFactory.get(rawSql));
+        // 设置行号
+        formatSql.setParagraphGraphicFactory(LineNumberFactory.get(formatSql));
+
     }
 
     private void initEvent(){
@@ -54,16 +64,16 @@ public class SQLFormatController extends SQLFormatView {
         pasteSql.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             if (clipboard.hasString()) {
-                rawSql.setText(clipboard.getString());
+                rawSql.replaceText(clipboard.getString());
             }
         });
 
         cleanSql.setOnAction(event -> {
-            rawSql.setText("");
+            rawSql.replaceText("");
         });
 
         clearFormatSql.setOnAction(event -> {
-            formatSql.setText("");
+            formatSql.replaceText("");
         });
 
         copySql.setOnAction(event -> {

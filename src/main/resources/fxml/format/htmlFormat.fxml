@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.fxmisc.richtext.CodeArea?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="htmlAnchorPane"
+            fx:controller="com.zeros.devtool.controller.format.HTMLFormatController">
+
+    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+          AnchorPane.topAnchor="0.0">
+        <HBox>
+            <HBox spacing="30" prefWidth="500.0" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Button text="粘貼" fx:id="pasteHtml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button text="复制" fx:id="copyHtml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button text="清空" fx:id="cleanHtml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+            <HBox spacing="30" prefWidth="500.0" alignment="CENTER">
+                <Button fx:id="clearFormatHtml" text="清空">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="copyFormatHtml" text="复制">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10" right="10"/>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+        </HBox>
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
+            <CodeArea fx:id="rawHtml" HBox.hgrow="ALWAYS"/>
+
+            <VBox HBox.hgrow="ALWAYS">
+                <HBox fx:id="searchHBox" spacing="5" visible="false" managed="false" alignment="CENTER">
+                    <TextField fx:id="keyWordSearch" promptText="搜索" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="upButton" text="↑"/>
+                    <Button fx:id="downButton" text="↓"/>
+                    <Label fx:id="searchNum" text="0/0"/>
+                    <Button fx:id="searchClose" text="x"/>
+                </HBox>
+                <CodeArea fx:id="formatHtml" VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+        </HBox>
+    </VBox>
+
+</AnchorPane>

@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import org.fxmisc.richtext.LineNumberFactory;
 
 
 import java.net.URL;
@@ -32,6 +33,12 @@ public class XMLFormatController extends XMLFormatView {
     }
 
     private void initView() {
+
+        // 设置行号
+        rawXML.setParagraphGraphicFactory(LineNumberFactory.get(rawXML));
+        // 设置行号
+        formatXML.setParagraphGraphicFactory(LineNumberFactory.get(formatXML));
+
         //内容变化监听
         rawXML.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -46,16 +53,25 @@ public class XMLFormatController extends XMLFormatView {
         pasteXml.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             if (clipboard.hasString()) {
-                rawXML.setText(clipboard.getString());
+                rawXML.replaceText(clipboard.getString());
             }
         });
 
         cleanXml.setOnAction(event -> {
-            rawXML.setText("");
+            rawXML.replaceText("");
         });
 
         clearFormatXML.setOnAction(event -> {
-            formatXML.setText("");
+            formatXML.replaceText("");
+        });
+
+
+        copyXml.setOnAction(event -> {
+            Clipboard clipboard = Clipboard.getSystemClipboard();
+            ClipboardContent clipboardContent = new ClipboardContent();
+            clipboardContent.putString(copyXml.getText());
+            clipboard.setContent(clipboardContent);
+            ToastUtil.toast("复制成功",2000);
         });
 
         copyFormatXML.setOnAction(event -> {

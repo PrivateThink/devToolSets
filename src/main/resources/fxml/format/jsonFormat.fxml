@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import org.fxmisc.richtext.CodeArea?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.zeros.devtool.controller.format.JsonFormatController">
@@ -11,9 +12,13 @@
              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" tabClosingPolicy="ALL_TABS">
         <Tab text="选项卡" >
             <HBox fx:id="jsonHBox" spacing="5">
-                <TextArea fx:id="jsonText" HBox.hgrow="ALWAYS" >
-                </TextArea>
-                <TextArea  fx:id="formatText" HBox.hgrow="ALWAYS"/>
+
+                <CodeArea fx:id="jsonText" HBox.hgrow="ALWAYS">
+                </CodeArea>
+
+                <CodeArea fx:id="formatText" HBox.hgrow="ALWAYS">
+                </CodeArea>
+
             </HBox>
         </Tab>
     </TabPane>

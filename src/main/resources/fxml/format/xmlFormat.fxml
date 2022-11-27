@@ -3,61 +3,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import org.fxmisc.richtext.CodeArea?>
+<?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:id="xmlAnchorPane"
             fx:controller="com.zeros.devtool.controller.format.XMLFormatController">
 
+    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+        <HBox>
+            <HBox prefWidth="500.0" spacing="30" HBox.hgrow="ALWAYS" alignment="CENTER" >
+                <Button text="粘貼" fx:id="pasteXml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button text="复制" fx:id="copyXml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button text="清空" fx:id="cleanXml" textAlignment="CENTER" alignment="CENTER">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+            <HBox prefWidth="500.0" spacing="30" HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Button fx:id="clearFormatXML" text="清空">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10"/>
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="copyFormatXML" text="复制">
+                    <HBox.margin>
+                        <Insets top="10" bottom="10" right="10"/>
+                    </HBox.margin>
+                </Button>
+            </HBox>
+        </HBox>
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
+            <CodeArea fx:id="rawXML" HBox.hgrow="ALWAYS">
+            </CodeArea>
 
-    <HBox spacing="5"  fx:id="xmlHox" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
-          AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0" >
-        <BorderPane  HBox.hgrow="ALWAYS">
-            <top>
-                <HBox spacing="40" alignment="CENTER" >
-                    <Button text="粘貼" fx:id="pasteXml" textAlignment="CENTER" alignment="CENTER">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button text="复制" fx:id="copyXml" textAlignment="CENTER" alignment="CENTER">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button text="清空" fx:id="cleanXml" textAlignment="CENTER" alignment="CENTER">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </top>
-            <center>
-                <TextArea fx:id="rawXML">
-
-                </TextArea>
-            </center>
-        </BorderPane>
-        <BorderPane HBox.hgrow="ALWAYS">
-            <top>
-                <HBox spacing="40" alignment="CENTER_RIGHT">
-                    <Button fx:id="clearFormatXML" text="清空">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button fx:id="copyFormatXML" text="复制">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10" right="10"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </top>
-            <center>
-                <TextArea fx:id="formatXML">
-
-                </TextArea>
-            </center>
-        </BorderPane>
-    </HBox>
+            <CodeArea fx:id="formatXML" HBox.hgrow="ALWAYS">
+            </CodeArea>
+        </HBox>
+    </VBox>
 
 </AnchorPane>

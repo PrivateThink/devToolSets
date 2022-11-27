@@ -1,74 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ChoiceBox?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:id="sqlAnchorPane"
+<?import org.fxmisc.flowless.*?>
+<?import org.fxmisc.richtext.*?>
+
+<AnchorPane fx:id="sqlAnchorPane"
+            xmlns="http://javafx.com/javafx/10.0.2-internal"
+            xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@/css/splitPane.css"
             fx:controller="com.zeros.devtool.controller.format.SQLFormatController">
 
+    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+        <HBox>
+            <HBox  prefWidth="500.0"  spacing="30" alignment="CENTER" HBox.hgrow="ALWAYS" >
+                <Label text="数据库类型" alignment="CENTER" textAlignment="CENTER">
+                    <HBox.margin>
+                        <Insets bottom="10" top="10" />
+                    </HBox.margin>
+                </Label>
+                <ChoiceBox fx:id="sqlBox">
+                    <HBox.margin>
+                        <Insets bottom="10" top="10" />
+                    </HBox.margin>
+                </ChoiceBox>
+                <Button fx:id="cleanSql" text="清空" >
+                    <HBox.margin>
+                        <Insets bottom="10" top="10" />
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="pasteSql" text="粘貼">
+                    <HBox.margin>
+                        <Insets bottom="10" top="10" />
+                    </HBox.margin>
+                </Button>
+            </HBox>
+            <HBox  prefWidth="500.0" alignment="CENTER" spacing="30" HBox.hgrow="ALWAYS">
+                <Button fx:id="clearFormatSql" text="清空">
+                    <HBox.margin>
+                        <Insets bottom="10" top="10" />
+                    </HBox.margin>
+                </Button>
+                <Button fx:id="copySql" text="复制">
+                    <HBox.margin>
+                        <Insets bottom="10" right="10" top="10" />
+                    </HBox.margin>
+                </Button>
+            </HBox>
+        </HBox>
+        <HBox spacing="10" VBox.vgrow="ALWAYS">
+            <CodeArea fx:id="rawSql" HBox.hgrow="ALWAYS">
+            </CodeArea>
 
-    <HBox spacing="5" fx:id="sqlHBox" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
-          AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0" >
-        <BorderPane  HBox.hgrow="ALWAYS">
-            <top>
-                <HBox spacing="40" alignment="CENTER" >
-                    <Label text="数据库类型" alignment="CENTER" textAlignment="CENTER">
-                    </Label>
-                    <ChoiceBox fx:id="sqlBox">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-                    <Button text="清空" fx:id="cleanSql" textAlignment="CENTER" alignment="CENTER_RIGHT">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button text="粘貼" fx:id="pasteSql" textAlignment="CENTER" alignment="CENTER_RIGHT">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </top>
-            <center>
-                <TextArea fx:id="rawSql">
-
-                </TextArea>
-            </center>
-        </BorderPane>
-        <BorderPane HBox.hgrow="ALWAYS">
-            <top>
-                <HBox spacing="40" alignment="CENTER_RIGHT">
-                    <Button fx:id="clearFormatSql" text="清空">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10"/>
-                        </HBox.margin>
-                    </Button>
-                    <Button fx:id="copySql" text="复制">
-                        <HBox.margin>
-                            <Insets top="10" bottom="10" right="10"/>
-                        </HBox.margin>
-                    </Button>
-                </HBox>
-            </top>
-            <center>
-                <TextArea fx:id="formatSql">
-
-                </TextArea>
-            </center>
-        </BorderPane>
-    </HBox>
-
-
-
+            <CodeArea fx:id="formatSql" HBox.hgrow="ALWAYS">
+            </CodeArea>
+        </HBox>
+    </VBox>
 </AnchorPane>

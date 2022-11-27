@@ -29,9 +29,6 @@ public  abstract class IndexView  implements Initializable {
     @FXML
     protected BorderPane indexPane;
 
-    @FXML
-    protected SplitPane indexSplitPane;
-
 
     @FXML
     protected VBox indexVBox;

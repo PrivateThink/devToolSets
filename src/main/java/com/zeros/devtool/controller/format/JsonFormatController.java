@@ -12,7 +12,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import org.apache.commons.lang3.StringUtils;
-
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 
 
 import java.net.URL;
@@ -31,6 +32,11 @@ public class JsonFormatController extends JsonFormatView {
     }
 
     private void initView() {
+
+        // 设置行号
+        jsonText.setParagraphGraphicFactory(LineNumberFactory.get(jsonText));
+        // 设置行号
+        formatText.setParagraphGraphicFactory(LineNumberFactory.get(formatText));
     }
 
     private void initEvent() {
@@ -48,7 +54,7 @@ public class JsonFormatController extends JsonFormatView {
 
             Tab selectedItem = tabPaneMain.getSelectionModel().getSelectedItem();
             HBox hBox = (HBox) selectedItem.getContent();
-            TextArea formatArea = (TextArea)hBox.getChildren().get(1);
+            CodeArea formatArea = (CodeArea)hBox.getChildren().get(1);
             //查找 ctrl + F
             if (new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN).match(event)
                     && StringUtils.isNotBlank(formatArea.getText())) {

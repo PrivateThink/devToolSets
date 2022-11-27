@@ -7,6 +7,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import lombok.Data;
+import org.fxmisc.richtext.CodeArea;
 
 @Data
 public abstract class XMLFormatView implements Initializable {
@@ -14,8 +15,6 @@ public abstract class XMLFormatView implements Initializable {
     @FXML
     protected AnchorPane xmlAnchorPane;
 
-    @FXML
-    protected HBox xmlHox;
 
     @FXML
     protected Button pasteXml;
@@ -27,7 +26,7 @@ public abstract class XMLFormatView implements Initializable {
     protected Button cleanXml;
 
     @FXML
-    protected TextArea rawXML;
+    protected CodeArea rawXML;
 
     @FXML
     protected Button clearFormatXML;
@@ -36,5 +35,5 @@ public abstract class XMLFormatView implements Initializable {
     protected Button copyFormatXML;
 
     @FXML
-    protected TextArea formatXML;
+    protected CodeArea formatXML;
 }
