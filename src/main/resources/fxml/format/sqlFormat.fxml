@@ -12,7 +12,10 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.zeros.devtool.controller.format.SQLFormatController">
 
-    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <HBox alignment="CENTER">
+            <Label text="SQL 格式化" VBox.vgrow="ALWAYS" alignment="CENTER" style="-fx-font-size: 16"/>
+        </HBox>
         <HBox>
             <HBox  prefWidth="500.0"  spacing="30" alignment="CENTER" HBox.hgrow="ALWAYS" >
                 <Label text="数据库类型" alignment="CENTER" textAlignment="CENTER">

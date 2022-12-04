@@ -10,8 +10,10 @@
             fx:id="xmlAnchorPane"
             fx:controller="com.zeros.devtool.controller.format.XMLFormatController">
 
-
-    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
+    <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <HBox alignment="CENTER">
+            <Label text="XML 格式化" VBox.vgrow="ALWAYS" alignment="CENTER" style="-fx-font-size: 16"/>
+        </HBox>
         <HBox>
             <HBox prefWidth="500.0" spacing="30" HBox.hgrow="ALWAYS" alignment="CENTER" >
                 <Button text="粘貼" fx:id="pasteXml" textAlignment="CENTER" alignment="CENTER">

@@ -58,8 +58,8 @@ public class PortCheckService {
         return processMap;
     }
 
-    public void kill(String pid) {
-        RuntimeUtil.execForStr(CmdConstants.KILL_OPERATOR + pid);
+    public String kill(String pid) {
+        return RuntimeUtil.execForStr(CmdConstants.KILL_OPERATOR + pid);
     }
 
 }

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.zeros.devtool.model.system.PortCheckInfo;
 import com.zeros.devtool.service.PortCheckService;
 import com.zeros.devtool.utils.ControllerMangerUtil;
+import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.system.PortCheckView;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -83,7 +84,8 @@ public class PortCheckController extends PortCheckView {
                     alert.close();
                 } else if (buttonType.get() == ButtonType.OK) {
                     //终止
-                    portService.kill(info.getPid());
+                    String result = portService.kill(info.getPid());
+                    ToastUtil.toast(result,3000);
                     //刷新
                     refresh(portTableView);
                 }
