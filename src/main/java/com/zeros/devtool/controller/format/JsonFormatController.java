@@ -2,8 +2,9 @@ package com.zeros.devtool.controller.format;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zeros.devtool.control.SearchCodeArea;
 import com.zeros.devtool.utils.ControllerMangerUtil;
-import com.zeros.devtool.utils.ToastUtil;
+
 import com.zeros.devtool.utils.view.ViewUtil;
 import com.zeros.devtool.view.format.JsonFormatView;
 import javafx.beans.value.ChangeListener;
@@ -11,19 +12,12 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
+
 
 
 import java.net.URL;
@@ -31,9 +25,6 @@ import java.util.ResourceBundle;
 
 public class JsonFormatController extends JsonFormatView {
 
-
-    // 开始搜索的位置
-    private int startIndex = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,34 +34,20 @@ public class JsonFormatController extends JsonFormatView {
     }
 
     private void initView() {
-        // 设置行号
-        jsonText.setParagraphGraphicFactory(LineNumberFactory.get(jsonText));
-        // 设置行号
-        formatText.setParagraphGraphicFactory(LineNumberFactory.get(formatText));
+
     }
 
     private void initEvent() {
 
 
         //内容变化监听
-        jsonText.textProperty().addListener(new ChangeListener<String>() {
+        jsonText.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                setJsonTextEvent(newValue, jsonText, formatText);
+                setJsonTextEvent(newValue, jsonText.getCodeArea(), formatText.getCodeArea());
             }
         });
 
-        tabPaneMain.setOnKeyPressed(event -> {
-
-            Tab selectedItem = tabPaneMain.getSelectionModel().getSelectedItem();
-            HBox hBox = (HBox) selectedItem.getContent();
-            CodeArea formatArea = (CodeArea)hBox.getChildren().get(1);
-            //查找 ctrl + F
-            if (new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_DOWN).match(event)
-                    && StringUtils.isNotBlank(formatArea.getText())) {
-                 findText(formatArea);
-            }
-        });
 
 
 
@@ -102,42 +79,6 @@ public class JsonFormatController extends JsonFormatView {
             formatText.replaceText("");
         }
 
-    }
-
-
-    public void findText(CodeArea formatText){
-        HBox searchWindow = new HBox();
-        searchWindow.setSpacing(10);
-        searchWindow.setPadding(new Insets(10));
-        Label label = new Label("查找目标:");
-        label.setAlignment(Pos.CENTER);
-        label.setTextAlignment(TextAlignment.CENTER);
-        TextField textField = new TextField();
-        Button button = new Button("查找");
-        searchWindow.getChildren().addAll(label, textField, button);
-        Stage stage = new Stage();
-        stage.setTitle("查找");
-        stage.setScene(new Scene(searchWindow));
-        stage.setResizable(false);
-        stage.show();
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                String text = formatText.getText();
-                String targetText = textField.getText();
-                if (StringUtils.isBlank(targetText)) {
-                    ToastUtil.toast("查找的内容不能为空", 2000);
-                    return;
-                }
-                if (StringUtils.isNotEmpty(text)) {
-                    startIndex = text.indexOf(targetText, startIndex);
-                    if (startIndex >= 0 && startIndex < text.length()) {
-                        formatText.selectRange(startIndex, startIndex + targetText.length());
-                        startIndex += targetText.length();
-                    }
-                }
-            }
-        });
     }
 
 
@@ -183,21 +124,17 @@ public class JsonFormatController extends JsonFormatView {
 
         if(newTab == addTab) {
             HBox hBox = new HBox();
-            CodeArea leftArea = new CodeArea();
+            SearchCodeArea leftArea = new SearchCodeArea();
             hBox.setSpacing(5);
             hBox.setPadding(new Insets(5,10,10,10));
-            CodeArea rightArea = new CodeArea();
-            leftArea.textProperty().addListener(new ChangeListener<String>() {
+            SearchCodeArea rightArea = new SearchCodeArea();
+            leftArea.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    setJsonTextEvent(newValue,leftArea,rightArea);
+                    setJsonTextEvent(newValue,leftArea.getCodeArea(),rightArea.getCodeArea());
                 }
             });
 
-            // 设置行号
-            leftArea.setParagraphGraphicFactory(LineNumberFactory.get(leftArea));
-            // 设置行号
-            rightArea.setParagraphGraphicFactory(LineNumberFactory.get(rightArea));
             HBox.setHgrow(leftArea, Priority.ALWAYS);
             HBox.setHgrow(rightArea, Priority.ALWAYS);
             hBox.getChildren().addAll(leftArea, rightArea);

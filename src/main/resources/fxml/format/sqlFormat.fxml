@@ -6,6 +6,7 @@
 <?import org.fxmisc.flowless.*?>
 <?import org.fxmisc.richtext.*?>
 
+<?import com.zeros.devtool.control.SearchCodeArea?>
 <AnchorPane fx:id="sqlAnchorPane"
             xmlns="http://javafx.com/javafx/10.0.2-internal"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -49,11 +50,9 @@
             </HBox>
         </HBox>
         <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <CodeArea fx:id="rawSql" HBox.hgrow="ALWAYS">
-            </CodeArea>
+            <SearchCodeArea fx:id="rawSql" HBox.hgrow="ALWAYS"/>
 
-            <CodeArea fx:id="formatSql" HBox.hgrow="ALWAYS">
-            </CodeArea>
+            <SearchCodeArea fx:id="formatSql" HBox.hgrow="ALWAYS"/>
         </HBox>
     </VBox>
 </AnchorPane>

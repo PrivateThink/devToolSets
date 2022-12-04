@@ -1,11 +1,12 @@
 package com.zeros.devtool.view.format;
 
+import com.zeros.devtool.control.SearchCodeArea;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import lombok.Data;
-import org.fxmisc.richtext.CodeArea;
+
 
 @Data
 public abstract class JsonFormatView implements Initializable {
@@ -14,10 +15,10 @@ public abstract class JsonFormatView implements Initializable {
     protected TabPane tabPaneMain;
 
     @FXML
-    protected CodeArea jsonText;
+    protected SearchCodeArea jsonText;
 
     @FXML
-    protected CodeArea formatText;
+    protected SearchCodeArea formatText;
 
     @FXML
     public HBox jsonHBox;

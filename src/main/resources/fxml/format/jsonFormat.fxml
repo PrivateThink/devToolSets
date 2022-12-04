@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import org.fxmisc.richtext.CodeArea?>
+<?import com.zeros.devtool.control.SearchCodeArea?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.zeros.devtool.controller.format.JsonFormatController">
@@ -13,11 +14,10 @@
         <Tab text="选项卡" >
             <HBox fx:id="jsonHBox" spacing="5">
 
-                <CodeArea fx:id="jsonText" HBox.hgrow="ALWAYS">
-                </CodeArea>
+                <SearchCodeArea fx:id="jsonText" HBox.hgrow="ALWAYS">
+                </SearchCodeArea>
 
-                <CodeArea fx:id="formatText" HBox.hgrow="ALWAYS">
-                </CodeArea>
+                <SearchCodeArea fx:id="formatText" HBox.hgrow="ALWAYS"/>
 
             </HBox>
         </Tab>

@@ -1,6 +1,8 @@
 package com.zeros.devtool.controller.format;
 
 import cn.hutool.core.util.XmlUtil;
+import com.zeros.devtool.enums.CodeTypeEnum;
+import com.zeros.devtool.utils.CodeLightUtil;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
 import com.zeros.devtool.view.format.XMLFormatView;
@@ -11,7 +13,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
 import org.w3c.dom.Document;
 
 
@@ -35,38 +36,50 @@ public class XMLFormatController extends XMLFormatView {
 
     private void initView() {
 
-        // 设置行号
-        rawXML.setParagraphGraphicFactory(LineNumberFactory.get(rawXML));
-        // 设置行号
-        formatXML.setParagraphGraphicFactory(LineNumberFactory.get(formatXML));
-
-
     }
 
     private void initEvent() {
 
         //内容变化监听
-        rawXML.textProperty().addListener(new ChangeListener<String>() {
+        rawXML.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                formatXML(rawXML,formatXML);
+                formatXML(rawXML.getCodeArea(),formatXML.getCodeArea());
             }
         });
+
+
+
+        //设置代码高亮
+        rawXML.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,rawXML.getCodeArea(), CodeTypeEnum.XML);
+            }
+        });
+
+        formatXML.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,formatXML.getCodeArea(), CodeTypeEnum.XML);
+            }
+        });
+
 
         //粘贴
         pasteXml.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             if (clipboard.hasString()) {
-                rawXML.replaceText(clipboard.getString());
+                rawXML.getCodeArea().replaceText(clipboard.getString());
             }
         });
 
         cleanXml.setOnAction(event -> {
-            rawXML.replaceText("");
+            rawXML.getCodeArea().replaceText("");
         });
 
         clearFormatXML.setOnAction(event -> {
-            formatXML.replaceText("");
+            formatXML.getCodeArea().replaceText("");
         });
 
 

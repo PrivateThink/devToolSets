@@ -18,6 +18,25 @@
 }
 
 
+.xmlKeyword {
+    -fx-fill: #0080ff;
+    -fx-font-weight: bold;
+}
+
+.xmlComment {
+    -fx-fill: #008040;
+}
+
+.sqlKeyword {
+    -fx-fill: #0080ff;
+    -fx-font-weight: bold;
+}
+
+.sqlComment {
+    -fx-fill: #008040;
+}
+
+
 /*.code-area {*/
 /*    -fx-font-family: "Fira Code", Consolas, monospace;*/
 /*}*/

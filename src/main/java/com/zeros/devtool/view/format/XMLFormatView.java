@@ -1,11 +1,12 @@
 package com.zeros.devtool.view.format;
 
+import com.zeros.devtool.control.SearchCodeArea;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import lombok.Data;
-import org.fxmisc.richtext.CodeArea;
+
 
 @Data
 public abstract class XMLFormatView implements Initializable {
@@ -24,7 +25,7 @@ public abstract class XMLFormatView implements Initializable {
     protected Button cleanXml;
 
     @FXML
-    protected CodeArea rawXML;
+    protected SearchCodeArea rawXML;
 
     @FXML
     protected Button clearFormatXML;
@@ -33,5 +34,5 @@ public abstract class XMLFormatView implements Initializable {
     protected Button copyFormatXML;
 
     @FXML
-    protected CodeArea formatXML;
+    protected SearchCodeArea formatXML;
 }

@@ -4,6 +4,7 @@ import cn.hutool.core.util.RuntimeUtil;
 import com.zeros.devtool.constants.*;
 import com.zeros.devtool.controller.index.IndexController;
 import com.zeros.devtool.controller.network.SwitchHostController;
+import com.zeros.devtool.enums.CodeTypeEnum;
 import com.zeros.devtool.enums.MenuTypeEnum;
 import com.zeros.devtool.utils.*;
 import com.zeros.devtool.utils.view.ViewUtil;
@@ -222,8 +223,13 @@ public class SwitchHostService {
     public void initHostArea(CodeArea hostArea) {
 
         hostArea.setParagraphGraphicFactory(LineNumberFactory.get(hostArea));
-        //host 高亮
-        CodeLightUtil.setHostLight(hostArea);
+        //设置代码高亮
+        hostArea.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,hostArea, CodeTypeEnum.HOST);
+            }
+        });
 
         hostArea.setOnKeyPressed(event -> {
             //快捷键 ctrl + s

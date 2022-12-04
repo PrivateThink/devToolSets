@@ -1,6 +1,8 @@
 package com.zeros.devtool.controller.format;
 
 import com.alibaba.druid.DbType;
+import com.zeros.devtool.enums.CodeTypeEnum;
+import com.zeros.devtool.utils.CodeLightUtil;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.SQLFormatUtils;
 import com.zeros.devtool.utils.ToastUtil;
@@ -16,7 +18,6 @@ import javafx.scene.input.ClipboardContent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
 
 
 import java.net.URL;
@@ -52,41 +53,50 @@ public class SQLFormatController extends SQLFormatView {
     private void initView(){
         //设置数据库类型
         setDBType(sqlBox);
-
-        // 设置行号
-        rawSql.setParagraphGraphicFactory(LineNumberFactory.get(rawSql));
-        // 设置行号
-        formatSql.setParagraphGraphicFactory(LineNumberFactory.get(formatSql));
-
     }
 
     private void initEvent(){
         //内容变化监听
-        rawSql.textProperty().addListener(new ChangeListener<String>() {
+        rawSql.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                formatSql(rawSql,formatSql,sqlBox);
+                formatSql(rawSql.getCodeArea(),formatSql.getCodeArea(),sqlBox);
             }
         });
 
         sqlBox.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-                formatSql(rawSql,formatSql,sqlBox);
+                formatSql(rawSql.getCodeArea(),formatSql.getCodeArea(),sqlBox);
+        });
+
+        //设置代码高亮
+        rawSql.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,rawSql.getCodeArea(), CodeTypeEnum.SQL);
+            }
+        });
+
+        formatSql.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,formatSql.getCodeArea(), CodeTypeEnum.SQL);
+            }
         });
 
         //粘贴
         pasteSql.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             if (clipboard.hasString()) {
-                rawSql.replaceText(clipboard.getString());
+                rawSql.getCodeArea().replaceText(clipboard.getString());
             }
         });
 
         cleanSql.setOnAction(event -> {
-            rawSql.replaceText("");
+            rawSql.getCodeArea().replaceText("");
         });
 
         clearFormatSql.setOnAction(event -> {
-            formatSql.replaceText("");
+            formatSql.getCodeArea().replaceText("");
         });
 
         copySql.setOnAction(event -> {
@@ -107,7 +117,6 @@ public class SQLFormatController extends SQLFormatView {
             try {
                 String sql = SQLFormatUtils.format(rawSql.getText(), DbType.valueOf(dbType));
                 formatSql.replaceText(sql);
-                rawSql.replaceText(sql);
             }catch (Exception e){
                 log.error("sql format error:",e);
                 formatSql.replaceText(e.getMessage());

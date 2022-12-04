@@ -18,4 +18,7 @@ public class FxmlConstant {
 
     public static final String PORT_CHECK= "/fxml/system/portCheck.fxml";
 
+    public static final String SEARCH_CODE_AREA= "/fxml/control/searchCodeArea.fxml";
+
+
 }

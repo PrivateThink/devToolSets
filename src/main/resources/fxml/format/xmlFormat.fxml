@@ -3,12 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import org.fxmisc.richtext.CodeArea?>
-<?import org.fxmisc.flowless.VirtualizedScrollPane?>
+
+<?import com.zeros.devtool.control.SearchCodeArea?>
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:id="xmlAnchorPane"
             fx:controller="com.zeros.devtool.controller.format.XMLFormatController">
+
 
     <VBox AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
         <HBox>
@@ -43,11 +44,9 @@
             </HBox>
         </HBox>
         <HBox spacing="10" VBox.vgrow="ALWAYS">
-            <CodeArea fx:id="rawXML" HBox.hgrow="ALWAYS">
-            </CodeArea>
+            <SearchCodeArea fx:id="rawXML" HBox.hgrow="ALWAYS"/>
 
-            <CodeArea fx:id="formatXML" HBox.hgrow="ALWAYS">
-            </CodeArea>
+            <SearchCodeArea fx:id="formatXML" HBox.hgrow="ALWAYS"/>
         </HBox>
     </VBox>
 

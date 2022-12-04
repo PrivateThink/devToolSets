@@ -1,5 +1,6 @@
 package com.zeros.devtool.controller.format;
 
+import com.zeros.devtool.enums.CodeTypeEnum;
 import com.zeros.devtool.utils.CodeLightUtil;
 import com.zeros.devtool.utils.ControllerMangerUtil;
 import com.zeros.devtool.utils.ToastUtil;
@@ -10,12 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import org.apache.commons.lang3.StringUtils;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.LineNumberFactory;
 import org.jsoup.Jsoup;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HTMLFormatController extends HTMLFormatView {
+
 
 
 
@@ -27,12 +28,6 @@ public class HTMLFormatController extends HTMLFormatView {
     }
 
     private void initView() {
-
-        // 设置行号
-        rawHtml.setParagraphGraphicFactory(LineNumberFactory.get(rawHtml));
-        // 设置行号
-        formatHtml.setParagraphGraphicFactory(LineNumberFactory.get(rawHtml));
-
 
     }
 
@@ -47,10 +42,25 @@ public class HTMLFormatController extends HTMLFormatView {
     private void initEvent() {
 
         //内容变化监听
-        rawHtml.textProperty().addListener(new ChangeListener<String>() {
+        rawHtmArea.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                formatHtml(rawHtml,formatHtml);
+                formatHtml(rawHtmArea.getCodeArea(),formatHtmlArea.getCodeArea());
+            }
+        });
+
+        //设置代码高亮
+        rawHtmArea.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,rawHtmArea.getCodeArea(), CodeTypeEnum.HTML);
+            }
+        });
+
+        formatHtmlArea.getCodeArea().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                CodeLightUtil.setCodeLight(newValue,formatHtmlArea.getCodeArea(), CodeTypeEnum.HTML);
             }
         });
 
@@ -58,16 +68,16 @@ public class HTMLFormatController extends HTMLFormatView {
         pasteHtml.setOnAction(event -> {
             Clipboard clipboard = Clipboard.getSystemClipboard();
             if (clipboard.hasString()) {
-                rawHtml.replaceText(clipboard.getString());
+                rawHtmArea.getCodeArea().replaceText(clipboard.getString());
             }
         });
 
         cleanHtml.setOnAction(event -> {
-            rawHtml.replaceText("");
+            rawHtmArea.getCodeArea().replaceText("");
         });
 
         clearFormatHtml.setOnAction(event -> {
-            formatHtml.replaceText("");
+            formatHtmlArea.getCodeArea().replaceText("");
         });
 
         copyHtml.setOnAction(event -> {
@@ -77,23 +87,6 @@ public class HTMLFormatController extends HTMLFormatView {
         copyFormatHtml.setOnAction(event -> {
             copyEvent(copyFormatHtml);
         });
-
-        htmlAnchorPane.setOnKeyPressed(event -> {
-            if ((event.isControlDown() || event.isMetaDown()) && event.getCode().equals(KeyCode.F)) {
-                searchHBox.setVisible(true);
-                searchHBox.setManaged(true);
-            }
-        });
-
-        searchClose.setOnAction(event -> {
-            searchHBox.setVisible(false);
-            searchHBox.setManaged(false);
-        });
-
-        //html 高亮
-        CodeLightUtil.setHtmlLight(rawHtml);
-        CodeLightUtil.setHtmlLight(formatHtml);
-
     }
 
     /**
